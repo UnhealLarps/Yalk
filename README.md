@@ -2,7 +2,7 @@
 
 <b> <| [Releases](https://github.com/UnhealLarps/Yalk/releases) | [Discord](https://discord.gg/y2wBXQThc9) |> </b>
 
-## An experimental 2D multiplayer shooter game with a short played rounds. 
+## An experimental 2D multiplayer shooter game. 
 
 > [!WARNING]
 > The game is in early development and everything may change before release.
