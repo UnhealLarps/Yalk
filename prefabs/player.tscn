@@ -1,0 +1,295 @@
+[gd_scene format=3 uid="uid://cyx4wb34e4swm"]
+
+[ext_resource type="Script" uid="uid://cjhf2wsf8xjmi" path="res://scripts/player/controller.gd" id="1_56dyf"]
+[ext_resource type="Texture2D" uid="uid://dewllmgibjshm" path="res://sprites/player/torso.png" id="1_dqkch"]
+[ext_resource type="Texture2D" uid="uid://dkp2sgvsqhhya" path="res://sprites/player/head.png" id="2_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://ngk8qmfks6h4" path="res://sprites/player/Faces/defEye.png" id="3_8cdkg"]
+[ext_resource type="Texture2D" uid="uid://dkff7isllm0fo" path="res://sprites/player/muscle/torso.png" id="3_8rb0w"]
+[ext_resource type="Texture2D" uid="uid://0yu8kd0q8bc3" path="res://sprites/player/hand.png" id="4_fjrip"]
+[ext_resource type="Texture2D" uid="uid://c8n5c1bncb1cn" path="res://sprites/player/skeleton/torso.png" id="4_sd3sa"]
+[ext_resource type="PackedScene" uid="uid://36ygosb7wtr7" path="res://prefabs/ui/ItemDescription.tscn" id="7_kbsxf"]
+[ext_resource type="Texture2D" uid="uid://cvv0rhahn4mf1" path="res://sprites/player/muscle/head.png" id="7_x0bak"]
+[ext_resource type="Texture2D" uid="uid://b823or2a4yhtl" path="res://sprites/player/skeleton/head.png" id="8_lulei"]
+[ext_resource type="Script" uid="uid://ddupn66resm2v" path="res://scripts/player/pockets.gd" id="8_r053x"]
+[ext_resource type="Script" uid="uid://bclye47tewgt8" path="res://scripts/player/hand_collision.gd" id="9_hand"]
+[ext_resource type="Texture2D" uid="uid://cknowpvi14ti4" path="res://sprites/player/muscle/hand.png" id="10_edtk3"]
+[ext_resource type="Texture2D" uid="uid://bsfaidrvo7opm" path="res://sprites/player/skeleton/hand.png" id="11_q2wkl"]
+[ext_resource type="Script" uid="uid://cdyuibj8uq3dm" path="res://scripts/player/violence.gd" id="14_lulei"]
+[ext_resource type="PackedScene" uid="uid://y3bi5jqfy1dc" path="res://prefabs/ui/playerHud.tscn" id="16_lulei"]
+[ext_resource type="Script" uid="uid://dvhsm3bq15h6d" path="res://scripts/player/corpse.gd" id="18_corpse"]
+[ext_resource type="Script" uid="uid://c53wlqnb80ukf" path="res://scripts/ui/pause_menu.gd" id="18_f2e50"]
+[ext_resource type="PackedScene" uid="uid://cg51rcs0m6wrm" path="res://prefabs/ui/pause_menu.tscn" id="19_22xyk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8cdkg"]
+radius = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o77n"]
+size = Vector2(19.512197, 17.968754)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6v0jn"]
+size = Vector2(19.512196, 9.375002)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_56dyf"]
+radius = 9.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rgeog"]
+size = Vector2(19.512197, 26.953133)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lulei"]
+size = Vector2(7.9268293, 7.421877)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_edtk3"]
+radius = 20.024984
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lulei"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1688136163]
+collision_layer = 2
+script = ExtResource("1_56dyf")
+
+[node name="ChatBubble" type="RichTextLabel" parent="." unique_id=2043940893]
+anchors_preset = -1
+anchor_right = 0.5
+offset_left = -78.0
+offset_top = -94.0
+offset_right = 78.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="Corpse" type="Node" parent="." unique_id=1183645911]
+script = ExtResource("18_corpse")
+
+[node name="BodyVisuals" type="Node2D" parent="." unique_id=923360727]
+
+[node name="Torso" type="Node2D" parent="BodyVisuals" unique_id=819850507]
+
+[node name="Skeleton" type="Sprite2D" parent="BodyVisuals/Torso" unique_id=365380465]
+position = Vector2(0, -0.75000376)
+scale = Vector2(0.09860889, 0.121)
+texture = ExtResource("4_sd3sa")
+
+[node name="Muscle" type="Sprite2D" parent="BodyVisuals/Torso" unique_id=1679159871]
+position = Vector2(0, -0.75000376)
+scale = Vector2(0.09860889, 0.121)
+texture = ExtResource("3_8rb0w")
+
+[node name="Skin" type="Sprite2D" parent="BodyVisuals/Torso" unique_id=1755206885]
+clip_children = 2
+position = Vector2(0, -0.75000376)
+scale = Vector2(0.09860889, 0.121)
+texture = ExtResource("1_dqkch")
+
+[node name="Head" type="Node2D" parent="BodyVisuals" unique_id=2012102468]
+
+[node name="Skeleton" type="Sprite2D" parent="BodyVisuals/Head" unique_id=1576646643]
+position = Vector2(0, -44.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("8_lulei")
+
+[node name="Muscle" type="Sprite2D" parent="BodyVisuals/Head" unique_id=1755649581]
+position = Vector2(0, -44.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("7_x0bak")
+
+[node name="Skin" type="Sprite2D" parent="BodyVisuals/Head" unique_id=461639543]
+clip_children = 2
+position = Vector2(0, -44.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_qlg0r")
+
+[node name="LeftEye" type="Sprite2D" parent="BodyVisuals/Head/Skin" unique_id=1877375971]
+position = Vector2(-50, -20.000038)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("3_8cdkg")
+
+[node name="RightEye" type="Sprite2D" parent="BodyVisuals/Head/Skin" unique_id=1404062636]
+position = Vector2(120.00001, -20.000038)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("3_8cdkg")
+
+[node name="Hands" type="Node2D" parent="BodyVisuals" unique_id=826810670]
+
+[node name="LeftShoulder" type="Marker2D" parent="BodyVisuals/Hands" unique_id=699952735]
+position = Vector2(-15.999999, -31.000002)
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="Skeleton" type="Sprite2D" parent="BodyVisuals/Hands/LeftShoulder" unique_id=330717605]
+z_index = 1
+position = Vector2(-14.000001, 22.000002)
+scale = Vector2(0.075675674, 0.075675674)
+texture = ExtResource("11_q2wkl")
+
+[node name="Muscle" type="Sprite2D" parent="BodyVisuals/Hands/LeftShoulder" unique_id=1323812115]
+z_index = 1
+position = Vector2(-14.000001, 22.000002)
+scale = Vector2(0.144, 0.144)
+texture = ExtResource("10_edtk3")
+
+[node name="Skin" type="Sprite2D" parent="BodyVisuals/Hands/LeftShoulder" unique_id=1169801526]
+clip_children = 2
+z_index = 1
+position = Vector2(-13.999999, 22.000004)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_fjrip")
+
+[node name="RightShoulder" type="Marker2D" parent="BodyVisuals/Hands" unique_id=1000731169]
+position = Vector2(15.999997, -31)
+scale = Vector2(0.9999999, 0.9999999)
+
+[node name="Skeleton" type="Sprite2D" parent="BodyVisuals/Hands/RightShoulder" unique_id=264003323]
+z_index = 1
+position = Vector2(17, 22)
+scale = Vector2(0.07567568, 0.07567568)
+texture = ExtResource("11_q2wkl")
+
+[node name="Muscle" type="Sprite2D" parent="BodyVisuals/Hands/RightShoulder" unique_id=686572914]
+z_index = 1
+position = Vector2(17, 22)
+scale = Vector2(0.14400001, 0.14400001)
+texture = ExtResource("10_edtk3")
+
+[node name="Skin" type="Sprite2D" parent="BodyVisuals/Hands/RightShoulder" unique_id=533449117]
+clip_children = 2
+z_index = 1
+position = Vector2(16.999996, 22)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_fjrip")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2132780026]
+
+[node name="HeadCollision" type="CollisionShape2D" parent="." unique_id=1191421556]
+position = Vector2(0, -45)
+shape = SubResource("CircleShape2D_8cdkg")
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="." unique_id=1888373520]
+position = Vector2(-8.046627e-07, -7.9999976)
+scale = Vector2(1.6399999, 2.559999)
+shape = SubResource("RectangleShape2D_6o77n")
+
+[node name="LegCollision" type="CollisionShape2D" parent="." unique_id=949652913]
+position = Vector2(-2.9802319e-08, 26.999996)
+scale = Vector2(1.6399999, 2.5599988)
+shape = SubResource("RectangleShape2D_6v0jn")
+
+[node name="LeftHandCollision" type="CharacterBody2D" parent="." unique_id=711625360]
+top_level = true
+position = Vector2(-30, -9)
+collision_layer = 8
+motion_mode = 1
+script = ExtResource("9_hand")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftHandCollision" unique_id=56587032]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="LeftHandArea" type="Area2D" parent="LeftHandCollision" unique_id=471607140]
+collision_layer = 16
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftHandCollision/LeftHandArea" unique_id=120001]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="Marker2D" type="Marker2D" parent="LeftHandCollision/LeftHandArea" unique_id=120002]
+
+[node name="RightHandCollision" type="CharacterBody2D" parent="." unique_id=1629001699]
+top_level = true
+position = Vector2(33, -9)
+collision_layer = 8
+motion_mode = 1
+script = ExtResource("9_hand")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightHandCollision" unique_id=642837094]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="RightHandArea" type="Area2D" parent="RightHandCollision" unique_id=1096923279]
+collision_layer = 16
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightHandCollision/RightHandArea" unique_id=120003]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="Marker2D" type="Marker2D" parent="RightHandCollision/RightHandArea" unique_id=120004]
+
+[node name="Pockets" type="Node2D" parent="." unique_id=862608345]
+script = ExtResource("8_r053x")
+
+[node name="Slot1" type="Marker2D" parent="Pockets" unique_id=748079394]
+
+[node name="Slot2" type="Marker2D" parent="Pockets" unique_id=717132339]
+
+[node name="HitBoxes" type="Node2D" parent="." unique_id=1968918905]
+
+[node name="Body" type="Area2D" parent="HitBoxes" unique_id=907055482]
+collision_layer = 16
+collision_mask = 0
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="HitBoxes/Body" unique_id=1580528061]
+position = Vector2(0, 3.500001)
+scale = Vector2(1.6399999, 2.559999)
+shape = SubResource("RectangleShape2D_rgeog")
+debug_color = Color(0.9852399, 0, 0.34032992, 0.41960785)
+
+[node name="Heart" type="Area2D" parent="HitBoxes" unique_id=2073595908]
+collision_layer = 16
+collision_mask = 0
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="HitBoxes/Heart" unique_id=1998301581]
+position = Vector2(0.5, -17)
+scale = Vector2(1.6399999, 2.559999)
+shape = SubResource("RectangleShape2D_lulei")
+debug_color = Color(0.96862745, 0, 0, 0.41960785)
+
+[node name="Head" type="Area2D" parent="HitBoxes" unique_id=284897593]
+position = Vector2(0, -45)
+collision_layer = 16
+collision_mask = 0
+
+[node name="HeadCollision" type="CollisionShape2D" parent="HitBoxes/Head" unique_id=1336431377]
+shape = SubResource("CircleShape2D_edtk3")
+debug_color = Color(0.2548208, 0.6351514, 0, 0.41960785)
+
+[node name="Brain" type="Area2D" parent="HitBoxes" unique_id=990556938]
+position = Vector2(0, -54)
+collision_layer = 16
+collision_mask = 0
+
+[node name="HeadCollision" type="CollisionShape2D" parent="HitBoxes/Brain" unique_id=124709592]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_lulei")
+debug_color = Color(0.7703442, 0.30135837, 0.82210326, 0.41960785)
+
+[node name="UltraViolence" type="Node2D" parent="." unique_id=610223228 node_paths=PackedStringArray("body_hitbox", "head_hitbox", "left_hand_hitbox", "right_hand_hitbox", "body_skin", "body_muscle", "body_skeleton", "head_skin", "head_muscle", "head_skeleton", "left_hand_skin", "left_hand_muscle", "left_hand_skeleton", "right_hand_skin", "right_hand_muscle", "right_hand_skeleton")]
+script = ExtResource("14_lulei")
+body_hitbox = NodePath("../HitBoxes/Body")
+head_hitbox = NodePath("../HitBoxes/Head")
+left_hand_hitbox = NodePath("../LeftHandCollision/LeftHandArea")
+right_hand_hitbox = NodePath("../RightHandCollision/RightHandArea")
+body_skin = NodePath("../BodyVisuals/Torso/Skin")
+body_muscle = NodePath("../BodyVisuals/Torso/Muscle")
+body_skeleton = NodePath("../BodyVisuals/Torso/Skeleton")
+head_skin = NodePath("../BodyVisuals/Head/Skin")
+head_muscle = NodePath("../BodyVisuals/Head/Muscle")
+head_skeleton = NodePath("../BodyVisuals/Head/Skeleton")
+left_hand_skin = NodePath("../BodyVisuals/Hands/LeftShoulder/Skin")
+left_hand_muscle = NodePath("../BodyVisuals/Hands/LeftShoulder/Muscle")
+left_hand_skeleton = NodePath("../BodyVisuals/Hands/LeftShoulder/Skeleton")
+right_hand_skin = NodePath("../BodyVisuals/Hands/RightShoulder/Skin")
+right_hand_muscle = NodePath("../BodyVisuals/Hands/RightShoulder/Muscle")
+right_hand_skeleton = NodePath("../BodyVisuals/Hands/RightShoulder/Skeleton")
+
+[node name="ItemDescription" parent="." unique_id=800957900 instance=ExtResource("7_kbsxf")]
+
+[node name="HUD" parent="." unique_id=275636475 instance=ExtResource("16_lulei")]
+
+[node name="PauseMenu" type="Node2D" parent="." unique_id=1038991218 node_paths=PackedStringArray("pause_layer")]
+script = ExtResource("18_f2e50")
+pause_layer = NodePath("../PauseMenu2")
+metadata/asdsad = "idk why i made it node2d instead canvaslayer prefab"
+
+[node name="PauseMenu2" parent="." unique_id=981074555 instance=ExtResource("19_22xyk")]
+visible = false

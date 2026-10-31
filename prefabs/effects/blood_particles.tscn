@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/blood_particles.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://sprites/effects/blood_drop.png" id="2_texture"]
+
+[node name="BloodParticles" type="CPUParticles2D"]
+emitting = false
+amount = 18
+lifetime = 0.55
+one_shot = true
+explosiveness = 0.9
+texture = ExtResource("2_texture")
+direction = Vector2(0, -1)
+spread = 42.0
+gravity = Vector2(0, 430)
+initial_velocity_min = 60.0
+initial_velocity_max = 185.0
+scale_amount_min = 0.18
+scale_amount_max = 0.45
+color = Color(0.72, 0.015, 0.035, 0.96)
+script = ExtResource("1_script")

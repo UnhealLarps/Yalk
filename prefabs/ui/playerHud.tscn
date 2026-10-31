@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://y3bi5jqfy1dc"]
+
+[ext_resource type="Script" uid="uid://daqv3tpmfahnl" path="res://scripts/rounds/round_hud.gd" id="1_roundhud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
+bg_color = Color(0, 0, 0, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0, 0, 1)
+
+[node name="HUD" type="CanvasLayer" unique_id=1877898633]
+layer = 10
+script = ExtResource("1_roundhud")
+
+[node name="Root" type="Control" parent="." unique_id=2049158994]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RoundTimerPanel" type="Panel" parent="Root" unique_id=554338831]
+layout_mode = 0
+anchor_left = 0.35
+anchor_top = 0.03
+anchor_right = 0.65
+anchor_bottom = 0.1
+offset_left = -8.0
+offset_top = -2.0
+offset_right = 8.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="RoundTimer" type="Label" parent="Root/RoundTimerPanel" unique_id=2099228352]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1

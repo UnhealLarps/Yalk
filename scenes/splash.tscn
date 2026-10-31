@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://b1ph3kadx1na"]
+
+[ext_resource type="Script" uid="uid://bdqvv1rnhc7lg" path="res://scripts/ui/splash.gd" id="1_4rrho"]
+[ext_resource type="Texture2D" uid="uid://cpxxfa7dew5ds" path="res://sprites/branding/UnhealLarpsSplash.png" id="1_86pdq"]
+[ext_resource type="Shader" uid="uid://d0eoqxexlkjgm" path="res://shaders/dots.gdshader" id="2_10vqf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4rrho"]
+shader = ExtResource("2_10vqf")
+shader_parameter/progress = 0.0
+shader_parameter/dots_count = 20.0
+
+[node name="Control" type="Control" unique_id=767830644]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4rrho")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=65582217]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_86pdq")
+expand_mode = 1
+
+[node name="DotsEffect" type="ColorRect" parent="." unique_id=768064294]
+material = SubResource("ShaderMaterial_4rrho")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://djeeptnbjqc84"]
+
+[ext_resource type="Script" uid="uid://ch2j3gw8uup3m" path="res://scripts/player/pickup.gd" id="1_40o1u"]
+[ext_resource type="Texture2D" uid="uid://dna4ic2un3vou" path="res://sprites/weapons/pistols/glock.png" id="2_hsqt6"]
+[ext_resource type="Script" uid="uid://be34cl122m4sb" path="res://scripts/weapon/gun.gd" id="3_hsqt6"]
+[ext_resource type="PackedScene" uid="uid://chocj1m1yahxt" path="res://prefabs/weapons/bullet.tscn" id="4_qulhg"]
+[ext_resource type="AudioStream" uid="uid://bb1yj2yyhco7o" path="res://audio/sfx/glock.mp3" id="5_e453q"]
+[ext_resource type="Script" uid="uid://dpbq52bexob8a" path="res://scripts/items/description.gd" id="5_qulhg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqt6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q6fqx"]
+
+[node name="Glock17" type="RigidBody2D" unique_id=690670381 node_paths=PackedStringArray("grip") groups=["interactable"]]
+collision_layer = 4
+freeze_mode = 1
+script = ExtResource("1_40o1u")
+grip = NodePath("Grip")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=741477455]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1207886878]
+position = Vector2(0, 1.0000001)
+scale = Vector2(2.1194506, 1.4399998)
+shape = SubResource("RectangleShape2D_hsqt6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1679890099]
+position = Vector2(0, 1)
+scale = Vector2(2.119, 1.4309998)
+shape = SubResource("RectangleShape2D_q6fqx")
+
+[node name="Grip" type="Marker2D" parent="." unique_id=468035726]
+position = Vector2(-13, 8)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1113290725]
+scale = Vector2(0.04, 0.04)
+texture = ExtResource("2_hsqt6")
+
+[node name="GunComponent" type="Node2D" parent="." unique_id=1463213918 node_paths=PackedStringArray("muzzle")]
+script = ExtResource("3_hsqt6")
+muzzle = NodePath("MuzzleGunTest")
+bullet_scene = ExtResource("4_qulhg")
+fire_sound = ExtResource("5_e453q")
+reserve_ammo = 32
+
+[node name="MuzzleGunTest" type="Marker2D" parent="GunComponent" unique_id=1131339126]
+position = Vector2(22, -11)
+
+[node name="Description" type="Node2D" parent="." unique_id=1703068726]
+script = ExtResource("5_qulhg")
+text = "a regular Glock-17 pistol,
+with {GunComponent.magazine_ammo}/{GunComponent.reserve_ammo} ammo"

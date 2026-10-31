@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b4iuxebfk26qe"]
+
+[ext_resource type="Script" uid="uid://eko7jsrjqgcg" path="res://scripts/player/ghost.gd" id="1_ptb80"]
+
+[node name="Ghost" type="CharacterBody2D" unique_id=565144276]
+script = ExtResource("1_ptb80")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=458722446]

@@ -1,0 +1,313 @@
+[gd_scene format=3 uid="uid://bbp6q1b6eod0o"]
+
+[ext_resource type="Script" uid="uid://cd0kob6324nii" path="res://scripts/menu/menu.gd" id="1_con2f"]
+[ext_resource type="Texture2D" uid="uid://0syvrolrogmr" path="res://sprites/yalkLogo.png" id="1_yqeox"]
+[ext_resource type="Script" uid="uid://dmpnw107gmcf3" path="res://scripts/menu/corpse_backdrop.gd" id="2_mhnvy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uhop2"]
+bg_color = Color(0.10747974, 0.10747974, 0.10747967, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7785494, 0.106292985, 0, 1)
+
+[node name="Menu" type="Node2D" unique_id=1815514172]
+script = ExtResource("1_con2f")
+
+[node name="MenuUI" type="CanvasLayer" parent="." unique_id=642276212]
+
+[node name="CorpseBackdrop" type="Node2D" parent="MenuUI" unique_id=331232467]
+script = ExtResource("2_mhnvy")
+
+[node name="Root" type="Control" parent="MenuUI" unique_id=1632186331]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MenuUI/Root" unique_id=1031125622]
+z_index = -2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="YalkLogo" type="Sprite2D" parent="MenuUI/Root" unique_id=574158844]
+top_level = true
+position = Vector2(165.00002, 91)
+scale = Vector2(0.17743902, 0.19427711)
+texture = ExtResource("1_yqeox")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuUI/Root" unique_id=169976767]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -44.0
+offset_right = 186.0
+offset_bottom = -4.0
+grow_vertical = 0
+
+[node name="Connect" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=1732528483]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
+text = " JOIN "
+
+[node name="Host" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=783702909]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
+text = " HOST "
+
+[node name="Host2" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=1303306684]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
+text = " TUTORIAL "
+
+[node name="Exit" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=1954058740]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
+text = " EXIT "
+
+[node name="ConnectWindow" type="Window" parent="MenuUI/Root" unique_id=557359954]
+oversampling_override = 1.0
+title = "Server Browser"
+initial_position = 2
+size = Vector2i(500, 400)
+visible = false
+
+[node name="Background" type="ColorRect" parent="MenuUI/Root/ConnectWindow" unique_id=1037164589]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="MainLayout" type="VBoxContainer" parent="MenuUI/Root/ConnectWindow" unique_id=2121929102]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MenuUI/Root/ConnectWindow/MainLayout" unique_id=255997945]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ServerListContainer" type="VBoxContainer" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer" unique_id=1420823272]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ServerTemplate" type="PanelContainer" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer" unique_id=590374556]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer/ServerTemplate" unique_id=1935728127]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+
+[node name="HBox" type="HBoxContainer" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer/ServerTemplate/Margin" unique_id=464510167]
+layout_mode = 2
+
+[node name="ServerName" type="Label" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer/ServerTemplate/Margin/HBox" unique_id=1757808137]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Server: 127.0.0.1:7777"
+vertical_alignment = 1
+
+[node name="PlayerCount" type="Label" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer/ServerTemplate/Margin/HBox" unique_id=1850090258]
+layout_mode = 2
+text = "Players: 0/32"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ConnectButton" type="Button" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer/ServerTemplate/Margin/HBox" unique_id=1703232534]
+layout_mode = 2
+text = "Join"
+
+[node name="DeleteButton" type="Button" parent="MenuUI/Root/ConnectWindow/MainLayout/ScrollContainer/ServerListContainer/ServerTemplate/Margin/HBox" unique_id=812851208]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+text = "Delete"
+
+[node name="BottomToolbar" type="HBoxContainer" parent="MenuUI/Root/ConnectWindow/MainLayout" unique_id=2143606915]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlusButton" type="Button" parent="MenuUI/Root/ConnectWindow/MainLayout/BottomToolbar" unique_id=1558519675]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+text = "+"
+
+[node name="IPInputWindow" type="Window" parent="MenuUI/Root" unique_id=1633945149]
+oversampling_override = 1.0
+title = "Add Server"
+initial_position = 2
+size = Vector2i(320, 120)
+visible = false
+exclusive = true
+
+[node name="Background" type="ColorRect" parent="MenuUI/Root/IPInputWindow" unique_id=1904363780]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="Margin" type="MarginContainer" parent="MenuUI/Root/IPInputWindow" unique_id=299102196]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="MenuUI/Root/IPInputWindow/Margin" unique_id=1743474965]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IPLineEdit" type="LineEdit" parent="MenuUI/Root/IPInputWindow/Margin/VBox" unique_id=1735704213]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "IP address or IP:port"
+
+[node name="DoneButton" type="Button" parent="MenuUI/Root/IPInputWindow/Margin/VBox" unique_id=60663439]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "Done"
+
+[node name="NicknameWindow" type="Window" parent="MenuUI/Root" unique_id=986657621]
+oversampling_override = 1.0
+title = "Change nickname"
+initial_position = 2
+size = Vector2i(320, 120)
+exclusive = true
+
+[node name="Background" type="ColorRect" parent="MenuUI/Root/NicknameWindow" unique_id=1457724668]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="Margin" type="MarginContainer" parent="MenuUI/Root/NicknameWindow" unique_id=1384750467]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="MenuUI/Root/NicknameWindow/Margin" unique_id=1182673994]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLineEdit" type="LineEdit" parent="MenuUI/Root/NicknameWindow/Margin/VBox" unique_id=1420214356]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "player123"
+
+[node name="DoneButton" type="Button" parent="MenuUI/Root/NicknameWindow/Margin/VBox" unique_id=359461943]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "Done"
+
+[node name="HostWindow" type="Window" parent="MenuUI/Root" unique_id=381785210]
+oversampling_override = 1.0
+title = "Host Game"
+initial_position = 2
+size = Vector2i(360, 240)
+visible = false
+
+[node name="Background" type="ColorRect" parent="MenuUI/Root/HostWindow" unique_id=1106154494]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="Margin" type="MarginContainer" parent="MenuUI/Root/HostWindow" unique_id=671137168]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="MenuUI/Root/HostWindow/Margin" unique_id=788262354]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=372420640]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Server Name"
+
+[node name="ServerNameInput" type="LineEdit" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=1827321103]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "My Server"
+
+[node name="MaxPlayersLabel" type="Label" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=1754072010]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Max Players"
+
+[node name="MaxPlayersSpinBox" type="SpinBox" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=997642874]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+min_value = 1.0
+max_value = 64.0
+value = 4.0
+alignment = 1
+
+[node name="ControlSpacer" type="Control" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=216086884]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=1157449813]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CreateButton" type="Button" parent="MenuUI/Root/HostWindow/Margin/VBox/Buttons" unique_id=1944255213]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Create"
+
+[node name="Label" type="Label" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=965646905]
+layout_mode = 2
+text = "Your ip for connect:"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2039132241]
+position = Vector2(577, 324)

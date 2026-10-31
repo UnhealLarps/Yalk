@@ -1,0 +1,539 @@
+[gd_scene format=3 uid="uid://bsme672d0q0qc"]
+
+[ext_resource type="Script" uid="uid://cjhf2wsf8xjmi" path="res://scripts/player/controller.gd" id="1_cmspm"]
+[ext_resource type="Script" uid="uid://dvhsm3bq15h6d" path="res://scripts/player/corpse.gd" id="2_ikfo1"]
+[ext_resource type="Texture2D" uid="uid://c8n5c1bncb1cn" path="res://sprites/player/skeleton/torso.png" id="3_dwom6"]
+[ext_resource type="Texture2D" uid="uid://dkff7isllm0fo" path="res://sprites/player/muscle/torso.png" id="4_bl2xa"]
+[ext_resource type="Texture2D" uid="uid://dewllmgibjshm" path="res://sprites/player/torso.png" id="5_15kfc"]
+[ext_resource type="Texture2D" uid="uid://b823or2a4yhtl" path="res://sprites/player/skeleton/head.png" id="6_7a100"]
+[ext_resource type="Texture2D" uid="uid://cvv0rhahn4mf1" path="res://sprites/player/muscle/head.png" id="7_feaue"]
+[ext_resource type="Texture2D" uid="uid://dkp2sgvsqhhya" path="res://sprites/player/head.png" id="8_210s6"]
+[ext_resource type="Texture2D" uid="uid://ngk8qmfks6h4" path="res://sprites/player/Faces/defEye.png" id="9_5qvs7"]
+[ext_resource type="Texture2D" uid="uid://bsfaidrvo7opm" path="res://sprites/player/skeleton/hand.png" id="10_qbchm"]
+[ext_resource type="Texture2D" uid="uid://cknowpvi14ti4" path="res://sprites/player/muscle/hand.png" id="11_gxgfo"]
+[ext_resource type="Texture2D" uid="uid://0yu8kd0q8bc3" path="res://sprites/player/hand.png" id="12_sbw1o"]
+[ext_resource type="Script" uid="uid://bclye47tewgt8" path="res://scripts/player/hand_collision.gd" id="13_06rsu"]
+[ext_resource type="Script" uid="uid://ddupn66resm2v" path="res://scripts/player/pockets.gd" id="14_4gq6d"]
+[ext_resource type="Script" uid="uid://cdyuibj8uq3dm" path="res://scripts/player/violence.gd" id="15_mjrbb"]
+[ext_resource type="PackedScene" uid="uid://36ygosb7wtr7" path="res://prefabs/ui/ItemDescription.tscn" id="16_7kfc1"]
+[ext_resource type="PackedScene" uid="uid://y3bi5jqfy1dc" path="res://prefabs/ui/playerHud.tscn" id="17_jne3d"]
+[ext_resource type="PackedScene" uid="uid://b3slxamdggxah" path="res://prefabs/items/box.tscn" id="18_cmspm"]
+[ext_resource type="PackedScene" uid="uid://bvpdjkqxeyp5t" path="res://prefabs/weapons/ammobox.tscn" id="18_nr1vm"]
+[ext_resource type="PackedScene" uid="uid://c7f2wt7vx8ui2" path="res://prefabs/items/soda_can.tscn" id="19_ikfo1"]
+[ext_resource type="PackedScene" uid="uid://djeeptnbjqc84" path="res://prefabs/weapons/pistols/glock17.tscn" id="20_bl2xa"]
+[ext_resource type="Texture2D" uid="uid://0syvrolrogmr" path="res://sprites/yalkLogo.png" id="22_15kfc"]
+[ext_resource type="Script" uid="uid://xffjekvrlcha" path="res://scripts/tutorial_outro.gd" id="23_7a100"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8cdkg"]
+radius = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o77n"]
+size = Vector2(19.512197, 17.968754)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6v0jn"]
+size = Vector2(19.512196, 9.375002)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_56dyf"]
+radius = 9.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rgeog"]
+size = Vector2(19.512197, 26.953133)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lulei"]
+size = Vector2(7.9268293, 7.421877)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_edtk3"]
+radius = 20.024984
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lulei"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhop2"]
+size = Vector2(4177.5, 251)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6a2is"]
+size = Vector2(4345, 251)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i8gw2"]
+size = Vector2(296, 652.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4exn6"]
+size = Vector2(296, 652.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7a100"]
+size = Vector2(296, 637.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_feaue"]
+size = Vector2(757, 179)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_di0ww"]
+size = Vector2(153, 104)
+
+[node name="Node2D" type="Node2D" unique_id=856577473]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=70015006]
+collision_layer = 2
+script = ExtResource("1_cmspm")
+
+[node name="ChatBubble" type="RichTextLabel" parent="CharacterBody2D" unique_id=976240166]
+anchors_preset = -1
+anchor_right = 0.5
+offset_left = -78.0
+offset_top = -94.0
+offset_right = 78.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="Corpse" type="Node" parent="CharacterBody2D" unique_id=1791990058]
+script = ExtResource("2_ikfo1")
+
+[node name="BodyVisuals" type="Node2D" parent="CharacterBody2D" unique_id=823644739]
+
+[node name="Torso" type="Node2D" parent="CharacterBody2D/BodyVisuals" unique_id=1080010350]
+
+[node name="Skeleton" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Torso" unique_id=1293081948]
+position = Vector2(0, -0.75000376)
+scale = Vector2(0.09860889, 0.121)
+texture = ExtResource("3_dwom6")
+
+[node name="Muscle" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Torso" unique_id=8209045]
+position = Vector2(0, -0.75000376)
+scale = Vector2(0.09860889, 0.121)
+texture = ExtResource("4_bl2xa")
+
+[node name="Skin" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Torso" unique_id=2083200861]
+clip_children = 2
+position = Vector2(0, -0.75000376)
+scale = Vector2(0.09860889, 0.121)
+texture = ExtResource("5_15kfc")
+
+[node name="Head" type="Node2D" parent="CharacterBody2D/BodyVisuals" unique_id=1212442776]
+
+[node name="Skeleton" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Head" unique_id=43316580]
+position = Vector2(0, -44.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_7a100")
+
+[node name="Muscle" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Head" unique_id=1596617877]
+position = Vector2(0, -44.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("7_feaue")
+
+[node name="Skin" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Head" unique_id=140737766]
+clip_children = 2
+position = Vector2(0, -44.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("8_210s6")
+
+[node name="LeftEye" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Head/Skin" unique_id=2050201171]
+position = Vector2(-50, -20.000038)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("9_5qvs7")
+
+[node name="RightEye" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Head/Skin" unique_id=1685757456]
+position = Vector2(120.00001, -20.000038)
+scale = Vector2(0.99999976, 0.99999976)
+texture = ExtResource("9_5qvs7")
+
+[node name="Hands" type="Node2D" parent="CharacterBody2D/BodyVisuals" unique_id=1425389318]
+
+[node name="LeftShoulder" type="Marker2D" parent="CharacterBody2D/BodyVisuals/Hands" unique_id=969219338]
+position = Vector2(-15.999999, -31.000002)
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="Skeleton" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Hands/LeftShoulder" unique_id=1912141877]
+z_index = 1
+position = Vector2(-14.000001, 22.000002)
+scale = Vector2(0.075675674, 0.075675674)
+texture = ExtResource("10_qbchm")
+
+[node name="Muscle" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Hands/LeftShoulder" unique_id=347297370]
+z_index = 1
+position = Vector2(-14.000001, 22.000002)
+scale = Vector2(0.144, 0.144)
+texture = ExtResource("11_gxgfo")
+
+[node name="Skin" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Hands/LeftShoulder" unique_id=1427540693]
+clip_children = 2
+z_index = 1
+position = Vector2(-13.999999, 22.000004)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("12_sbw1o")
+
+[node name="RightShoulder" type="Marker2D" parent="CharacterBody2D/BodyVisuals/Hands" unique_id=1274903680]
+position = Vector2(15.999997, -31)
+scale = Vector2(0.9999999, 0.9999999)
+
+[node name="Skeleton" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Hands/RightShoulder" unique_id=375352728]
+z_index = 1
+position = Vector2(17, 22)
+scale = Vector2(0.07567568, 0.07567568)
+texture = ExtResource("10_qbchm")
+
+[node name="Muscle" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Hands/RightShoulder" unique_id=353005028]
+z_index = 1
+position = Vector2(17, 22)
+scale = Vector2(0.14400001, 0.14400001)
+texture = ExtResource("11_gxgfo")
+
+[node name="Skin" type="Sprite2D" parent="CharacterBody2D/BodyVisuals/Hands/RightShoulder" unique_id=1565113164]
+clip_children = 2
+z_index = 1
+position = Vector2(16.999996, 22)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("12_sbw1o")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=2132780026]
+
+[node name="HeadCollision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1576808467]
+position = Vector2(0, -45)
+shape = SubResource("CircleShape2D_8cdkg")
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=619483701]
+position = Vector2(-8.046627e-07, -7.9999976)
+scale = Vector2(1.6399999, 2.559999)
+shape = SubResource("RectangleShape2D_6o77n")
+
+[node name="LegCollision" type="CollisionShape2D" parent="CharacterBody2D" unique_id=356177817]
+position = Vector2(-2.9802319e-08, 26.999996)
+scale = Vector2(1.6399999, 2.5599988)
+shape = SubResource("RectangleShape2D_6v0jn")
+
+[node name="LeftHandCollision" type="CharacterBody2D" parent="CharacterBody2D" unique_id=1937133024]
+top_level = true
+position = Vector2(-30, -9)
+collision_layer = 8
+motion_mode = 1
+script = ExtResource("13_06rsu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/LeftHandCollision" unique_id=1872544986]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="LeftHandArea" type="Area2D" parent="CharacterBody2D/LeftHandCollision" unique_id=85337812]
+collision_layer = 16
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/LeftHandCollision/LeftHandArea" unique_id=646344565]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="Marker2D" type="Marker2D" parent="CharacterBody2D/LeftHandCollision/LeftHandArea" unique_id=1339694974]
+
+[node name="RightHandCollision" type="CharacterBody2D" parent="CharacterBody2D" unique_id=1496537494]
+top_level = true
+position = Vector2(33, -9)
+collision_layer = 8
+motion_mode = 1
+script = ExtResource("13_06rsu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/RightHandCollision" unique_id=1974193575]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="RightHandArea" type="Area2D" parent="CharacterBody2D/RightHandCollision" unique_id=1837646026]
+collision_layer = 16
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/RightHandCollision/RightHandArea" unique_id=1225094082]
+shape = SubResource("CircleShape2D_56dyf")
+
+[node name="Marker2D" type="Marker2D" parent="CharacterBody2D/RightHandCollision/RightHandArea" unique_id=465458003]
+
+[node name="Pockets" type="Node2D" parent="CharacterBody2D" unique_id=611882581]
+script = ExtResource("14_4gq6d")
+
+[node name="Slot1" type="Marker2D" parent="CharacterBody2D/Pockets" unique_id=664052168]
+
+[node name="Slot2" type="Marker2D" parent="CharacterBody2D/Pockets" unique_id=1741374813]
+
+[node name="HitBoxes" type="Node2D" parent="CharacterBody2D" unique_id=242821509]
+
+[node name="Body" type="Area2D" parent="CharacterBody2D/HitBoxes" unique_id=1592601262]
+collision_layer = 16
+collision_mask = 0
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="CharacterBody2D/HitBoxes/Body" unique_id=552767874]
+position = Vector2(0, 3.500001)
+scale = Vector2(1.6399999, 2.559999)
+shape = SubResource("RectangleShape2D_rgeog")
+debug_color = Color(0.9852399, 0, 0.34032992, 0.41960785)
+
+[node name="Heart" type="Area2D" parent="CharacterBody2D/HitBoxes" unique_id=129291329]
+collision_layer = 16
+collision_mask = 0
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="CharacterBody2D/HitBoxes/Heart" unique_id=191571105]
+position = Vector2(0.5, -17)
+scale = Vector2(1.6399999, 2.559999)
+shape = SubResource("RectangleShape2D_lulei")
+debug_color = Color(0.96862745, 0, 0, 0.41960785)
+
+[node name="Head" type="Area2D" parent="CharacterBody2D/HitBoxes" unique_id=1127316724]
+position = Vector2(0, -45)
+collision_layer = 16
+collision_mask = 0
+
+[node name="HeadCollision" type="CollisionShape2D" parent="CharacterBody2D/HitBoxes/Head" unique_id=507638616]
+shape = SubResource("CircleShape2D_edtk3")
+debug_color = Color(0.2548208, 0.6351514, 0, 0.41960785)
+
+[node name="Brain" type="Area2D" parent="CharacterBody2D/HitBoxes" unique_id=1645344038]
+position = Vector2(0, -54)
+collision_layer = 16
+collision_mask = 0
+
+[node name="HeadCollision" type="CollisionShape2D" parent="CharacterBody2D/HitBoxes/Brain" unique_id=1105951663]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_lulei")
+debug_color = Color(0.7703442, 0.30135837, 0.82210326, 0.41960785)
+
+[node name="UltraViolence" type="Node2D" parent="CharacterBody2D" unique_id=121274872 node_paths=PackedStringArray("body_hitbox", "head_hitbox", "left_hand_hitbox", "right_hand_hitbox", "body_skin", "body_muscle", "body_skeleton", "head_skin", "head_muscle", "head_skeleton", "left_hand_skin", "left_hand_muscle", "left_hand_skeleton", "right_hand_skin", "right_hand_muscle", "right_hand_skeleton")]
+script = ExtResource("15_mjrbb")
+body_hitbox = NodePath("../HitBoxes/Body")
+head_hitbox = NodePath("../HitBoxes/Head")
+left_hand_hitbox = NodePath("../LeftHandCollision/LeftHandArea")
+right_hand_hitbox = NodePath("../RightHandCollision/RightHandArea")
+body_skin = NodePath("../BodyVisuals/Torso/Skin")
+body_muscle = NodePath("../BodyVisuals/Torso/Muscle")
+body_skeleton = NodePath("../BodyVisuals/Torso/Skeleton")
+head_skin = NodePath("../BodyVisuals/Head/Skin")
+head_muscle = NodePath("../BodyVisuals/Head/Muscle")
+head_skeleton = NodePath("../BodyVisuals/Head/Skeleton")
+left_hand_skin = NodePath("../BodyVisuals/Hands/LeftShoulder/Skin")
+left_hand_muscle = NodePath("../BodyVisuals/Hands/LeftShoulder/Muscle")
+left_hand_skeleton = NodePath("../BodyVisuals/Hands/LeftShoulder/Skeleton")
+right_hand_skin = NodePath("../BodyVisuals/Hands/RightShoulder/Skin")
+right_hand_muscle = NodePath("../BodyVisuals/Hands/RightShoulder/Muscle")
+right_hand_skeleton = NodePath("../BodyVisuals/Hands/RightShoulder/Skeleton")
+
+[node name="ItemDescription" parent="CharacterBody2D" unique_id=1076163781 instance=ExtResource("16_7kfc1")]
+
+[node name="HUD" parent="CharacterBody2D" unique_id=2101734391 instance=ExtResource("17_jne3d")]
+visible = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=716822019]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=230907808]
+position = Vector2(1809.25, 199.5)
+shape = SubResource("RectangleShape2D_uhop2")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D" unique_id=1938539187]
+position = Vector2(1895.5, -337)
+shape = SubResource("RectangleShape2D_6a2is")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=646088405]
+position = Vector2(-427, -1.25)
+shape = SubResource("RectangleShape2D_i8gw2")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D" unique_id=1137335158]
+position = Vector2(4210, 50)
+shape = SubResource("RectangleShape2D_4exn6")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="StaticBody2D" unique_id=1203193167]
+position = Vector2(3751, 393.625)
+shape = SubResource("RectangleShape2D_7a100")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="StaticBody2D" unique_id=1518681701]
+position = Vector2(4551, 393)
+shape = SubResource("RectangleShape2D_7a100")
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="StaticBody2D" unique_id=384589640]
+position = Vector2(4165.5, 801.5)
+shape = SubResource("RectangleShape2D_feaue")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D" unique_id=1328435742]
+offset_left = -576.0
+offset_top = 74.0
+offset_right = 3903.0
+offset_bottom = 713.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="StaticBody2D" unique_id=723142357]
+offset_left = -577.0
+offset_top = -854.0
+offset_right = 4080.0
+offset_bottom = -214.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="StaticBody2D" unique_id=608304277]
+z_index = -3
+offset_left = -274.0
+offset_top = -216.0
+offset_right = 4056.0
+offset_bottom = 75.0
+
+[node name="ColorRect6" type="ColorRect" parent="StaticBody2D" unique_id=874560531]
+z_index = -3
+offset_left = -274.0
+offset_top = -5.0
+offset_right = 4066.0
+offset_bottom = 75.0
+color = Color(0.78211224, 0.7821123, 0.7821123, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="StaticBody2D" unique_id=1561690006]
+offset_left = 4060.0
+offset_top = -862.0
+offset_right = 4799.0
+offset_bottom = 372.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="StaticBody2D" unique_id=991655638]
+offset_left = -1275.0
+offset_top = -847.0
+offset_right = -271.0
+offset_bottom = 711.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect7" type="ColorRect" parent="StaticBody2D" unique_id=1063378644]
+z_index = -1
+offset_left = 3899.0
+offset_top = 75.0
+offset_right = 4403.0
+offset_bottom = 712.0
+color = Color(0.78039217, 0.78039217, 0.78039217, 1)
+
+[node name="TrashCanidk" parent="." unique_id=270385149 instance=ExtResource("18_cmspm")]
+position = Vector2(105, 82)
+
+[node name="Label" type="Label" parent="." unique_id=1504169923]
+offset_left = -54.0
+offset_top = -126.0
+offset_right = 151.0
+offset_bottom = -77.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = " Use A and D to move around
+Press Space to jump"
+
+[node name="Label2" type="Label" parent="." unique_id=1308720881]
+offset_left = 608.0
+offset_top = -126.0
+offset_right = 813.0
+offset_bottom = -77.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "Your hands are controlled independently. 
+Use LMB for your left hand and 
+RMB for your right hand."
+
+[node name="Label3" type="Label" parent="." unique_id=1254315040]
+offset_left = 1120.0
+offset_top = -129.0
+offset_right = 1446.0
+offset_bottom = -54.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "To grab an object, reach out 
+with your hand (LMB/RMB) and press F."
+
+[node name="Label4" type="Label" parent="." unique_id=229010481]
+offset_left = 1120.0
+offset_top = -73.0
+offset_right = 1485.0
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "Press Q to inspect any item you are holding. 
+This will also show you how much ammo is left."
+
+[node name="Label5" type="Label" parent="." unique_id=1490377953]
+offset_left = 1522.0
+offset_top = -126.0
+offset_right = 1945.0
+offset_bottom = -51.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "Use the Scroll Wheel to rotate the object in your hand. 
+Hold G to throw it with force, 
+or press G to carefully place it down."
+
+[node name="Label6" type="Label" parent="." unique_id=46169850]
+offset_left = 2250.0
+offset_top = -126.0
+offset_right = 2673.0
+offset_bottom = -51.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "press E to shoot. When you run out of bullets, 
+press R to reload."
+
+[node name="Label7" type="Label" parent="." unique_id=2119870068]
+offset_left = 2640.0
+offset_top = -70.0
+offset_right = 3063.0
+offset_bottom = 5.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "To reload from an ammo box, 
+aim your gun hand directly at the Ammobox and press F."
+
+[node name="Label8" type="Label" parent="." unique_id=56969627]
+offset_left = 3241.0
+offset_top = -148.0
+offset_right = 3679.0
+offset_bottom = -73.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "Press T to open the chat and talk to other players.
+(now work now in tutorial)"
+
+[node name="Label9" type="Label" parent="." unique_id=903174148]
+offset_left = 3553.0
+offset_top = -89.0
+offset_right = 4009.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "press  1 or 2 to get item from pocket (Reach out hand first).
+in a round start if you has a antag, team, you will have a
+weapon in pocket 1
+"
+
+[node name="Box" parent="." unique_id=1685726463 instance=ExtResource("18_cmspm")]
+position = Vector2(313, 81)
+
+[node name="Box2" parent="." unique_id=1209061154 instance=ExtResource("18_cmspm")]
+position = Vector2(332, 9)
+
+[node name="Box3" parent="." unique_id=1177390138 instance=ExtResource("18_cmspm")]
+position = Vector2(387, 80)
+
+[node name="Box4" parent="." unique_id=1250377351 instance=ExtResource("18_cmspm")]
+position = Vector2(364, -62)
+
+[node name="Box5" parent="." unique_id=709150263 instance=ExtResource("18_cmspm")]
+position = Vector2(999, 86)
+
+[node name="SodaCan" parent="." unique_id=1280913887 instance=ExtResource("19_ikfo1")]
+position = Vector2(1006, 7)
+
+[node name="Box6" parent="." unique_id=1547698069 instance=ExtResource("18_cmspm")]
+position = Vector2(2193, 83)
+
+[node name="Glock17" parent="." unique_id=690670381 instance=ExtResource("20_bl2xa")]
+position = Vector2(2195, -11)
+
+[node name="AmmoBox" parent="." unique_id=1500805927 instance=ExtResource("18_nr1vm")]
+position = Vector2(2860, 49)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=355972781]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1424133362]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1161753071]
+offset_left = 53.0
+offset_top = 239.0
+offset_right = 585.0
+offset_bottom = 439.0
+texture = ExtResource("22_15kfc")
+expand_mode = 1
+
+[node name="Area2D" type="Area2D" parent="." unique_id=443377649]
+position = Vector2(3979, 269)
+collision_mask = 2
+script = ExtResource("23_7a100")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=562740708]
+position = Vector2(2.5, -14)
+shape = SubResource("RectangleShape2D_di0ww")

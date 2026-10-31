@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://c7f2wt7vx8ui2"]
+
+[ext_resource type="Script" uid="uid://ch2j3gw8uup3m" path="res://scripts/player/pickup.gd" id="1_8g60h"]
+[ext_resource type="Texture2D" uid="uid://f2poliutrydb" path="res://sprites/items/lyubimiyNapitok.png" id="2_4ucwl"]
+[ext_resource type="Script" uid="uid://dpbq52bexob8a" path="res://scripts/items/description.gd" id="3_4ucwl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhop2"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_di0ww"]
+size = Vector2(16, 32)
+
+[node name="SodaCan" type="RigidBody2D" unique_id=1280913887 node_paths=PackedStringArray("grip")]
+collision_layer = 4
+mass = 0.5
+script = ExtResource("1_8g60h")
+grip = NodePath("Grip")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1346090489]
+position = Vector2(0, -16)
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("2_4ucwl")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1147191581]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1916180362]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_uhop2")
+
+[node name="Grip" type="Marker2D" parent="." unique_id=639741766]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2086575837]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_di0ww")
+debug_color = Color(0.9515962, 2.7915835e-06, 0.5653005, 0.41960785)
+
+[node name="Description" type="Node2D" parent="." unique_id=1377641166]
+script = ExtResource("3_4ucwl")
+text = "Most famous soda in the world,
+A fdsgfe"

@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://c8e6lnm6e234l"]
+
+[ext_resource type="Script" uid="uid://0uxxfd08pxiy" path="res://scripts/ui/chat.gd" id="1_chat"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chat"]
+content_margin_left = 7.0
+content_margin_top = 3.0
+content_margin_right = 7.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.78)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0, 0, 1)
+
+[node name="Chat" type="CanvasLayer" unique_id=1442741961]
+layer = 25
+script = ExtResource("1_chat")
+
+[node name="Root" type="Control" parent="." unique_id=485435631]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InputPanel" type="Panel" parent="Root" unique_id=1886426892]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -38.0
+offset_right = 408.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_chat")
+
+[node name="Input" type="LineEdit" parent="Root/InputPanel" unique_id=286580234]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+placeholder_text = "Сообщение..."
+
+[node name="ChatHistory" type="RichTextLabel" parent="Root" unique_id=2094380902]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_right = 408.0
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false

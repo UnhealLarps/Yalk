@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://dx46265urxmos"]
+
+[ext_resource type="Script" uid="uid://ch2j3gw8uup3m" path="res://scripts/player/pickup.gd" id="1_tosxg"]
+[ext_resource type="Texture2D" uid="uid://dbc26b7lforp5" path="res://sprites/weapons/melee/knife.png" id="2_ujp60"]
+[ext_resource type="Script" uid="uid://cpxyktvis1poo" path="res://scripts/items/sharp_damage.gd" id="3_a0krs"]
+[ext_resource type="Script" uid="uid://dpbq52bexob8a" path="res://scripts/items/description.gd" id="4_ujp60"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhop2"]
+size = Vector2(18, 39)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_di0ww"]
+size = Vector2(18, 39)
+
+[node name="Knife" type="RigidBody2D" unique_id=1280913887 node_paths=PackedStringArray("grip")]
+collision_layer = 4
+mass = 0.5
+script = ExtResource("1_tosxg")
+grip = NodePath("Grip")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1346090489]
+position = Vector2(-4.172325e-07, -19.999998)
+scale = Vector2(0.11, 0.110000014)
+texture = ExtResource("2_ujp60")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1147191581]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1916180362]
+position = Vector2(0, -17.5)
+shape = SubResource("RectangleShape2D_uhop2")
+
+[node name="Grip" type="Marker2D" parent="." unique_id=639741766]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2086575837]
+position = Vector2(0, -17.5)
+shape = SubResource("RectangleShape2D_di0ww")
+debug_color = Color(0.9515962, 2.7915835e-06, 0.5653005, 0.41960785)
+
+[node name="SharpDamage" type="Node" parent="." unique_id=1275134439 node_paths=PackedStringArray("area")]
+script = ExtResource("3_a0krs")
+area = NodePath("../Area2D")
+sharpness = 100.0
+
+[node name="Description" type="Node2D" parent="." unique_id=252229430]
+script = ExtResource("4_ujp60")
+text = "A sharp knife. It can kill."

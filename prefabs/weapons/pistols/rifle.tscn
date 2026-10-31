@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://b84hqrvm5yq7j"]
+
+[ext_resource type="Script" uid="uid://ch2j3gw8uup3m" path="res://scripts/player/pickup.gd" id="1_40o1u"]
+[ext_resource type="Texture2D" uid="uid://fb7lxh7wh1jg" path="res://sprites/weapons/rifles/rifle.png" id="2_4flu6"]
+[ext_resource type="Script" uid="uid://be34cl122m4sb" path="res://scripts/weapon/gun.gd" id="3_hsqt6"]
+[ext_resource type="PackedScene" uid="uid://chocj1m1yahxt" path="res://prefabs/weapons/bullet.tscn" id="4_qulhg"]
+[ext_resource type="Script" uid="uid://dpbq52bexob8a" path="res://scripts/items/description.gd" id="5_qulhg"]
+[ext_resource type="AudioStreamMP3" path="res://audio/sfx/rifle.mp3" id="6_fire"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsqt6"]
+size = Vector2(67.94214, 27.777784)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q6fqx"]
+size = Vector2(67.95659, 27.952488)
+
+[node name="Rifle" type="RigidBody2D" unique_id=690670381 node_paths=PackedStringArray("grip") groups=["interactable"]]
+collision_layer = 4
+freeze_mode = 1
+script = ExtResource("1_40o1u")
+grip = NodePath("Grip")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=741477455]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1207886878]
+position = Vector2(0, 5)
+scale = Vector2(2.1194506, 1.4399998)
+shape = SubResource("RectangleShape2D_hsqt6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1679890099]
+position = Vector2(0, 5)
+scale = Vector2(2.119, 1.4309998)
+shape = SubResource("RectangleShape2D_q6fqx")
+debug_color = Color(0.9838664, 0, 0.35340554, 0.41960785)
+
+[node name="Grip" type="Marker2D" parent="." unique_id=468035726]
+position = Vector2(-16, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1113290725]
+scale = Vector2(0.070490204, 0.07592593)
+texture = ExtResource("2_4flu6")
+
+[node name="GunComponent" type="Node2D" parent="." unique_id=1463213918 node_paths=PackedStringArray("muzzle")]
+script = ExtResource("3_hsqt6")
+muzzle = NodePath("MuzzleGunTest")
+bullet_scene = ExtResource("4_qulhg")
+fire_sound = ExtResource("6_fire")
+fire_rate = 1.0
+recoil_strength = 2.0
+magazine_size = 5
+magazine_ammo = 5
+reserve_ammo = 24
+reload_time = 2.0
+
+[node name="MuzzleGunTest" type="Marker2D" parent="GunComponent" unique_id=1131339126]
+position = Vector2(72, -12)
+
+[node name="Description" type="Node2D" parent="." unique_id=1703068726]
+script = ExtResource("5_qulhg")
+text = "Old winchester rifle,
+with {GunComponent.magazine_ammo}/{GunComponent.reserve_ammo} ammo"

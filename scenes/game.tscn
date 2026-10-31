@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b1at0yrvo1uxx"]
+
+[ext_resource type="Script" uid="uid://ds6ad2cgcxmo5" path="res://scripts/maps/map_manager.gd" id="5_map_manager"]
+[ext_resource type="PackedScene" uid="uid://c8e6lnm6e234l" path="res://prefabs/ui/chat.tscn" id="6_chat"]
+
+[node name="Node2D" type="Node2D" unique_id=1117027968]
+
+[node name="MapManager" type="Node2D" parent="." unique_id=1644796203]
+script = ExtResource("5_map_manager")
+
+[node name="Chat" parent="." instance=ExtResource("6_chat")]

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://chocj1m1yahxt"]
+
+[ext_resource type="Script" uid="uid://ckuc858m5esws" path="res://scripts/weapon/bullet.gd" id="1_ndyna"]
+[ext_resource type="Texture2D" uid="uid://u3gsry47n7cc" path="res://sprites/weapons/bullet.png" id="2_5h64r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhop2"]
+size = Vector2(12, 4)
+
+[node name="Bullet" type="Area2D" unique_id=1578457139]
+scale = Vector2(2.1805553, 2.3333313)
+collision_layer = 0
+collision_mask = 17
+script = ExtResource("1_ndyna")
+speed = 2200.0
+wound_radius = 4.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=873706845]
+position = Vector2(3.0406332, -0.14586325)
+scale = Vector2(0.5067719, 0.40426126)
+shape = SubResource("RectangleShape2D_uhop2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1982052180]
+position = Vector2(3.0406327, -0.14586326)
+scale = Vector2(0.015203163, 0.012127837)
+texture = ExtResource("2_5h64r")

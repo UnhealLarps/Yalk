@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bvpdjkqxeyp5t"]
+
+[ext_resource type="Script" uid="uid://cnyrektsrb0sv" path="res://scripts/weapon/ammo.gd" id="1_4qt00"]
+[ext_resource type="Texture2D" uid="uid://dr7tvutdajscs" path="res://sprites/weapons/ammobox.png" id="2_phqfh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhop2"]
+size = Vector2(48, 48)
+
+[node name="AmmoBox" type="RigidBody2D" unique_id=1500805927]
+collision_layer = 4
+freeze_mode = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1098303818]
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("2_phqfh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=718596220]
+shape = SubResource("RectangleShape2D_uhop2")
+
+[node name="AmmoComponent" type="Node2D" parent="." unique_id=278059450]
+script = ExtResource("1_4qt00")
