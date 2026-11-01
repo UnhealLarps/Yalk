@@ -1,6 +1,6 @@
 <img src="https://github.com/UnhealLarps/Yalk/blob/main/sprites/yalkLogo.png?raw=true" width=25%>
 
-<b> <| [Releases](https://github.com/UnhealLarps/Yalk/releases) | [Discord](https://discord.gg/y2wBXQThc9) |> </b>
+<b> [Releases](https://github.com/UnhealLarps/Yalk/releases) | [Discord](https://discord.gg/y2wBXQThc9) </b>
 
 ## An experimental 2D multiplayer shooter game. 
 
