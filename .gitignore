@@ -4,3 +4,5 @@
 .helpassets
 *.import
 *.uid
+build/
+export_presets.cfg
