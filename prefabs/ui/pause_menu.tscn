@@ -11,6 +11,15 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.7785494, 0.106292985, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7gr5p"]
+bg_color = Color(0.08627451, 0.08627451, 0.08627451, 0.89411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78039217, 0.105882354, 0, 1)
+corner_detail = 1
+
 [node name="PauseMenu" type="CanvasLayer" unique_id=981074555]
 script = ExtResource("1_7gr5p")
 
@@ -36,18 +45,21 @@ grow_vertical = 0
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5vahy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7gr5p")
 text = " RESUME "
 
 [node name="Settings" type="Button" parent="HBoxContainer" unique_id=1018998528]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5vahy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7gr5p")
 text = " SETTINGS "
 
 [node name="Disconnect" type="Button" parent="HBoxContainer" unique_id=777823907]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5vahy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7gr5p")
 text = " DISCONNECT "
 
 [node name="SettingsMenu" parent="." unique_id=1990192072 instance=ExtResource("1_cqca4")]
