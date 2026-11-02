@@ -11,7 +11,9 @@ const SERVER_REFRESH_INTERVAL_MSEC := 60000
 @onready var connect_button: Button = $MenuUI/Root/HBoxContainer/Connect
 @onready var host_button: Button = $MenuUI/Root/HBoxContainer/Host
 @onready var exit_button: Button = $MenuUI/Root/HBoxContainer/Exit
-@onready var tutorial_button: Button = $MenuUI/Root/HBoxContainer/Host2
+@onready var tutorial_button: Button = $MenuUI/Root/HBoxContainer/Tutorial
+@onready var settings_button: Button = $MenuUI/Root/HBoxContainer/Settings
+@onready var settings_window: Window = $MenuUI/Root/SettingsMenu
 @onready var connect_window: Window = $MenuUI/Root/ConnectWindow
 @onready var ip_input_window: Window = $MenuUI/Root/IPInputWindow
 @onready var host_window: Window = $MenuUI/Root/HostWindow
@@ -43,6 +45,7 @@ func _ready() -> void:
 		return
 	connect_button.pressed.connect(_open_connect_window)
 	host_button.pressed.connect(_open_host_window)
+	settings_button.pressed.connect(_open_settings)
 	tutorial_button.pressed.connect(_open_tutorial)
 	exit_button.pressed.connect(_exit_game)
 	NetworkManager.server_probe_finished.connect(_on_server_probe_finished)
@@ -353,3 +356,6 @@ func _on_done_pressed() -> void:
 	
 	window_node.hide()
 	rep.info("New nickname: {entered_text}")
+
+func _open_settings() -> void:
+	settings_window.popup_centered()

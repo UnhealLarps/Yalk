@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://dple2axa7arvr"]
+
+[ext_resource type="Script" uid="uid://co8otj8y0qcue" path="res://scripts/menu/settings_menu.gd" id="1_script"]
+
+[node name="SettingsMenu" type="Window" unique_id=1990192072]
+oversampling_override = 1.0
+title = "Settings"
+initial_position = 2
+size = Vector2i(450, 350)
+transient = true
+exclusive = true
+script = ExtResource("1_script")
+
+[node name="Background" type="Panel" parent="." unique_id=1936210001]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainLayout" type="VBoxContainer" parent="." unique_id=597491200]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Tabs" type="TabContainer" parent="MainLayout" unique_id=1574478329]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Window" type="MarginContainer" parent="MainLayout/Tabs" unique_id=1049311613]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+metadata/_tab_index = 0
+
+[node name="Grid" type="GridContainer" parent="MainLayout/Tabs/Window" unique_id=641826414]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+columns = 2
+
+[node name="Label" type="Label" parent="MainLayout/Tabs/Window/Grid" unique_id=412674057]
+layout_mode = 2
+text = "Window mode:"
+
+[node name="WindowModeButton" type="OptionButton" parent="MainLayout/Tabs/Window/Grid" unique_id=722024824]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 3
+popup/item_0/text = "Window"
+popup/item_0/id = 0
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Fullscreen"
+popup/item_2/id = 2
+
+[node name="Game" type="MarginContainer" parent="MainLayout/Tabs" unique_id=153639299]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+metadata/_tab_index = 1
+
+[node name="List" type="VBoxContainer" parent="MainLayout/Tabs/Game" unique_id=1597651786]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowFpsCheck" type="CheckBox" parent="MainLayout/Tabs/Game/List" unique_id=1298066420]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show FPS"
+
+[node name="DramaticDeathCheck" type="CheckBox" parent="MainLayout/Tabs/Game/List" unique_id=1382781828]
+unique_name_in_owner = true
+layout_mode = 2
+text = "More dramatic death"
+
+[node name="Audio" type="MarginContainer" parent="MainLayout/Tabs" unique_id=1861161184]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+metadata/_tab_index = 2
+
+[node name="Grid" type="GridContainer" parent="MainLayout/Tabs/Audio" unique_id=1740820350]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+columns = 2
+
+[node name="Label" type="Label" parent="MainLayout/Tabs/Audio/Grid" unique_id=1315243539]
+layout_mode = 2
+text = "Master"
+
+[node name="MasterSlider" type="HSlider" parent="MainLayout/Tabs/Audio/Grid" unique_id=325973272]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 100.0
+
+[node name="BottomPanel" type="HBoxContainer" parent="MainLayout" unique_id=73227070]
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="MainLayout/BottomPanel" unique_id=1067671132]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset all"
+
+[node name="Spacer" type="Control" parent="MainLayout/BottomPanel" unique_id=1865611778]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ApplyButton" type="Button" parent="MainLayout/BottomPanel" unique_id=1888251976]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply"
+
+[node name="CloseButton" type="Button" parent="MainLayout/BottomPanel" unique_id=1681662308]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"

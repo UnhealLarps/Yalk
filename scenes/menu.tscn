@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://cd0kob6324nii" path="res://scripts/menu/menu.gd" id="1_con2f"]
 [ext_resource type="Texture2D" uid="uid://0syvrolrogmr" path="res://sprites/yalkLogo.png" id="1_yqeox"]
 [ext_resource type="Script" uid="uid://dmpnw107gmcf3" path="res://scripts/menu/corpse_backdrop.gd" id="2_mhnvy"]
+[ext_resource type="PackedScene" uid="uid://dple2axa7arvr" path="res://prefabs/ui/settingsMenu.tscn" id="4_mhnvy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uhop2"]
-bg_color = Color(0.10747974, 0.10747974, 0.10747967, 1)
+bg_color = Color(0, 0, 0, 0.93333334)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -66,7 +67,13 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
 text = " HOST "
 
-[node name="Host2" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=1303306684]
+[node name="Settings" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=1935182978]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
+text = " SETTINGS "
+
+[node name="Tutorial" type="Button" parent="MenuUI/Root/HBoxContainer" unique_id=1303306684]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_uhop2")
@@ -308,6 +315,9 @@ text = "Create"
 [node name="Label" type="Label" parent="MenuUI/Root/HostWindow/Margin/VBox" unique_id=965646905]
 layout_mode = 2
 text = "Your ip for connect:"
+
+[node name="SettingsMenu" parent="MenuUI/Root" unique_id=1990192072 instance=ExtResource("4_mhnvy")]
+visible = false
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2039132241]
 position = Vector2(577, 324)

@@ -22,9 +22,11 @@ config/icon="res://icon.svg"
 Args="*res://scripts/args.gd"
 NetworkManager="*res://scripts/network_manager.gd"
 NicknameManager="*uid://crcqlig5uh8lp"
+Settings="*uid://bxwk6e6eq52qy"
 
 [display]
 
+window/stretch/mode="viewport"
 mouse_cursor/custom_image="uid://dtva0xc25g5bv"
 
 [dotnet]
@@ -41,9 +43,12 @@ folder_colors={
 "res://prefabs/": "teal",
 "res://scenes/": "orange",
 "res://scripts/": "green",
+"res://scripts/effects/": "gray",
 "res://scripts/items/": "purple",
+"res://scripts/menu/": "yellow",
 "res://scripts/player/": "red",
 "res://scripts/rounds/": "purple",
+"res://scripts/settings/": "pink",
 "res://scripts/weapon/": "orange",
 "res://sprites/": "purple"
 }

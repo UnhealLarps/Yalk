@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://cg51rcs0m6wrm"]
 
+[ext_resource type="Script" uid="uid://c53wlqnb80ukf" path="res://scripts/ui/pause_menu.gd" id="1_7gr5p"]
+[ext_resource type="PackedScene" uid="uid://dple2axa7arvr" path="res://prefabs/ui/settingsMenu.tscn" id="1_cqca4"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vahy"]
-bg_color = Color(0.10747974, 0.10747974, 0.10747967, 1)
+bg_color = Color(0.019607844, 0.019607844, 0.019607844, 0.9137255)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -9,6 +12,7 @@ border_width_bottom = 2
 border_color = Color(0.7785494, 0.106292985, 0, 1)
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=981074555]
+script = ExtResource("1_7gr5p")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1964873616]
 anchors_preset = 15
@@ -38,7 +42,6 @@ text = " RESUME "
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5vahy")
-disabled = true
 text = " SETTINGS "
 
 [node name="Disconnect" type="Button" parent="HBoxContainer" unique_id=777823907]
@@ -46,3 +49,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_5vahy")
 text = " DISCONNECT "
+
+[node name="SettingsMenu" parent="." unique_id=1990192072 instance=ExtResource("1_cqca4")]
+visible = false

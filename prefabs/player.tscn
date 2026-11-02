@@ -286,10 +286,6 @@ right_hand_skeleton = NodePath("../BodyVisuals/Hands/RightShoulder/Skeleton")
 
 [node name="HUD" parent="." unique_id=275636475 instance=ExtResource("16_lulei")]
 
-[node name="PauseMenu" type="Node2D" parent="." unique_id=1038991218 node_paths=PackedStringArray("pause_layer")]
-script = ExtResource("18_f2e50")
-pause_layer = NodePath("../PauseMenu2")
-metadata/asdsad = "idk why i made it node2d instead canvaslayer prefab"
-
-[node name="PauseMenu2" parent="." unique_id=981074555 instance=ExtResource("19_22xyk")]
+[node name="PauseMenu" parent="." unique_id=981074555 instance=ExtResource("19_22xyk")]
 visible = false
+script = ExtResource("18_f2e50")
