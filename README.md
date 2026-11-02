@@ -21,7 +21,11 @@ Servers you can find on our discord server.
 ### Creation
 Check [wiki](https://github.com/UnhealLarps/Yalk/wiki)
 
+## Features
+For the basics, complete the in-game tutorial. For advanced details regarding game modes and mechanics, check out our [Wiki](https://github.com/unheallarps/yalk/wiki).
+
 # License
 All code for the content repository is licensed under the AGPL. 
-**Music** - Sourced from Pixabay under the Pixabay Content License.
-**Sounds** - Sourced from free resources. 
+
+- **Music** - Sourced from Pixabay under the Pixabay Content License.
+- **Sounds** - Sourced from free resources. 
