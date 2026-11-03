@@ -15,6 +15,7 @@ const ROUND_RESULT_SCENE = preload("res://prefabs/ui/roundResult.tscn")
 const MURDERER_MODE = preload("res://scripts/rounds/murderer.gd")
 const MASSACRE_MODE = preload("res://scripts/rounds/massacre.gd")
 const DEATHMATCH_MODE = preload("res://scripts/rounds/deathmatch.gd")
+const KOH_MODE = preload("res://scripts/rounds/koh.gd")
 
 var mode: Resource = MURDERER_MODE.new()
 var phase: int = Phase.WAITING
@@ -56,7 +57,7 @@ func _process(delta: float):
 				_advance_phase()
 		elif phase == Phase.PLAYING:
 			round_elapsed = maxf(float(now_usec - round_start_server_usec) / 1000000.0, 0.0) if round_start_server_usec > 0 else 0.0
-			_process_mode_round()
+			_process_mode_round(delta)
 			_check_round_end()
 		_update_ui()
 		state_timer += delta
@@ -65,6 +66,8 @@ func _process(delta: float):
 			broadcast_state()
 	else:
 		_update_client_clock()
+		if mode.has_method("client_process"):
+			mode.call("client_process", delta)
 		_update_ui()
 
 func _update_client_clock():
@@ -191,6 +194,8 @@ func _can_start_round() -> bool:
 	return true
 
 func _start_intro():
+	if mode.has_method("end_round"):
+		mode.call("end_round")
 	mode = _choose_random_mode()
 	round_number += 1
 	phase = Phase.INTRO
@@ -207,6 +212,8 @@ func _start_intro():
 	else:
 		roles = {}
 	NetworkManager.begin_round_entities(active_players, roles)
+	if mode.has_method("start_round"):
+		mode.call("start_round", active_players)
 	_give_team_items()
 	_apply_team_outlines()
 	_show_round_start()
@@ -224,6 +231,8 @@ func _start_playing():
 func _end_round(result: String):
 	if not NetworkManager.is_server():
 		return
+	if mode.has_method("end_round"):
+		mode.call("end_round")
 	var waiting_state: Dictionary = NetworkManager.prepare_waiting_entities()
 	winner = result
 	waiting_players = _read_player_ids(waiting_state.get("players", []))
@@ -280,7 +289,9 @@ func _give_items_to_player(peer_id: int, team_name: String):
 		if not NetworkManager.has_method("spawn_item_in_slot") or not NetworkManager.spawn_item_in_slot(peer_id, slot_index, scene_path):
 			push_warning("Could not give '%s' to team '%s', slot %d, player %d" % [scene_path, team_name, slot_index + 1, peer_id])
 
-func _process_mode_round():
+func _process_mode_round(delta: float):
+	if mode.has_method("process_round"):
+		mode.call("process_round", delta, active_players)
 	if not mode.has_method("get_players_to_promote"):
 		return
 	var promoted_value: Variant = mode.call("get_players_to_promote", round_elapsed, active_players, roles)
@@ -331,7 +342,7 @@ func _get_mode_id() -> String:
 	return str(value) if value is String else "murderer"
 
 func _choose_random_mode() -> Resource:
-	var available_modes: Array[Resource] = [MURDERER_MODE.new(), MASSACRE_MODE.new(), DEATHMATCH_MODE.new()]
+	var available_modes: Array[Resource] = [MURDERER_MODE.new(), MASSACRE_MODE.new(), DEATHMATCH_MODE.new(), KOH_MODE.new()]
 	return available_modes.pick_random() as Resource
 
 func _create_mode(mode_id: String) -> Resource:
@@ -340,6 +351,8 @@ func _create_mode(mode_id: String) -> Resource:
 			return MASSACRE_MODE.new() as Resource
 		"deathmatch":
 			return DEATHMATCH_MODE.new() as Resource
+		"koh":
+			return KOH_MODE.new() as Resource
 		_:
 			return MURDERER_MODE.new() as Resource
 
@@ -363,7 +376,12 @@ func _build_state() -> Dictionary:
 		map_name = str(map_manager.call("get_current_map_name"))
 		if map_manager.has_method("get_map_revision"):
 			map_revision = int(map_manager.call("get_map_revision"))
-	return {"phase": phase, "phase_time": phase_time, "round_elapsed": round_elapsed, "server_time_usec": Time.get_ticks_usec(), "phase_end_server_usec": phase_end_server_usec, "round_start_server_usec": round_start_server_usec, "round_number": round_number, "completed_rounds": completed_rounds, "winner": winner, "active_players": active_players, "waiting_players": waiting_players, "roles": roles, "mode_id": _get_mode_id(), "mode_name": mode.get("mode_name"), "mode_description": mode.get("description"), "music_path": str(mode.get("music_path")), "map_name": map_name, "map_revision": map_revision, "positions": positions}
+	var mode_data: Dictionary = {}
+	if mode.has_method("get_network_state"):
+		var mode_state_value: Variant = mode.call("get_network_state")
+		if mode_state_value is Dictionary:
+			mode_data = mode_state_value
+	return {"phase": phase, "phase_time": phase_time, "round_elapsed": round_elapsed, "server_time_usec": Time.get_ticks_usec(), "phase_end_server_usec": phase_end_server_usec, "round_start_server_usec": round_start_server_usec, "round_number": round_number, "completed_rounds": completed_rounds, "winner": winner, "active_players": active_players, "waiting_players": waiting_players, "roles": roles, "mode_id": _get_mode_id(), "mode_name": mode.get("mode_name"), "mode_description": mode.get("description"), "music_path": str(mode.get("music_path")), "mode_data": mode_data, "map_name": map_name, "map_revision": map_revision, "positions": positions}
 
 func broadcast_state():
 	if not NetworkManager.is_server():
@@ -382,6 +400,8 @@ func receive_state(state: Dictionary):
 		return
 	var incoming_mode_id := str(state.get("mode_id", "murderer"))
 	if incoming_mode_id != _get_mode_id():
+		if mode.has_method("end_round"):
+			mode.call("end_round")
 		mode = _create_mode(incoming_mode_id)
 	phase = int(state.get("phase", Phase.WAITING))
 	phase_end_server_usec = int(state.get("phase_end_server_usec", 0))
@@ -421,6 +441,9 @@ func receive_state(state: Dictionary):
 			last_received_map_revision = incoming_map_revision
 	started = true
 	NetworkManager.sync_round_entities(active_players, waiting_players, positions, round_number, map_changed)
+	if mode.has_method("sync_network_state"):
+		var mode_data_value: Variant = state.get("mode_data", {})
+		mode.call("sync_network_state", mode_data_value if mode_data_value is Dictionary else {})
 	NetworkManager.flush_pending_player_states()
 	_apply_team_outlines()
 	_update_ui()

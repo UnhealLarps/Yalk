@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://daye87fbirsjk"]
+
+[ext_resource type="Texture2D" uid="uid://do8rae6o4iye0" path="res://sprites/items/flag.png" id="1_2qrd0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhop2"]
+size = Vector2(121, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_koh_area"]
+size = Vector2(120, 110)
+
+[node name="FlagForKoH" type="Node2D" unique_id=1281979855]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=411999342]
+offset_left = -60.0
+offset_top = -7.0
+offset_right = 61.0
+color = Color(0.15127608, 0.15127608, 0.15127608, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=1759621561]
+offset_left = -2.0
+offset_top = -273.0
+offset_right = 2.0
+offset_bottom = -7.0
+color = Color(0.07150052, 0.07150052, 0.07150049, 1)
+
+[node name="Flag" type="Sprite2D" parent="." unique_id=278036559]
+position = Vector2(30, -22)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_2qrd0")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1509569152]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1827088088]
+position = Vector2(0.5, -3.5)
+shape = SubResource("RectangleShape2D_uhop2")
+
+[node name="CaptureArea" type="Area2D" parent="." unique_id=2081947532]
+position = Vector2(0, -35)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaptureArea" unique_id=2081947533]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_koh_area")
+debug_color = Color(0.71424824, 0.48393255, 0, 0.41960785)
