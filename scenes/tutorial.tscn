@@ -463,6 +463,15 @@ theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
 text = "To reload from an ammo box, 
 aim your gun hand directly at the Ammobox and press F."
 
+[node name="Label10" type="Label" parent="." unique_id=1498506849]
+offset_left = 1967.0
+offset_top = -192.0
+offset_right = 2405.0
+offset_bottom = -117.0
+theme_override_colors/font_color = Color(0.365339, 0.365339, 0.365339, 1)
+text = "*if theres no gun, just push other 
+player by reaching arm and press E"
+
 [node name="Label8" type="Label" parent="." unique_id=56969627]
 offset_left = 3241.0
 offset_top = -148.0
