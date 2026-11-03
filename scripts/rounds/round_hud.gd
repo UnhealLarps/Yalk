@@ -2,17 +2,26 @@ extends CanvasLayer
 
 @onready var root: Control = $Root
 @onready var round_timer: Label = $Root/RoundTimerPanel/RoundTimer
+@onready var fps_panel: Panel = $Root/FPSPanel
+@onready var fps_label: Label = $Root/FPSPanel/Label
 
 func _ready():
 	_apply_local_visibility()
-	_set_timer_color()
 	round_timer.visible = false
+	
+	if Settings.check_option("show_fps"):
+		fps_panel.visible = true
+	else:
+		fps_panel.visible = false
 
 func _process(_delta: float):
 	_apply_local_visibility()
 	if not visible:
 		return
-	_set_timer_color()
+		
+	if fps_panel.visible:
+		fps_label.text = str(Engine.get_frames_per_second())
+	
 	var manager: Node = NetworkManager.round_manager
 	if manager == null or not is_instance_valid(manager) or not manager.has_method("is_round_playing") or not manager.call("is_round_playing"):
 		set_round_elapsed(-1.0)
@@ -25,20 +34,10 @@ func _apply_local_visibility():
 	var player := get_parent()
 	visible = player != null and is_instance_valid(player) and player.get("local_player") == true
 
-func _set_timer_color():
-	if not is_instance_valid(round_timer):
-		return
-	round_timer.add_theme_color_override("font_color", Color.WHITE)
-	round_timer.modulate = Color.WHITE
-	round_timer.self_modulate = Color.WHITE
-	root.modulate = Color.WHITE
-	root.self_modulate = Color.WHITE
-
 func set_round_elapsed(value: float):
 	if value < 0.0:
 		round_timer.visible = false
 		return
-	_set_timer_color()
 	round_timer.visible = true
 	var total_seconds := int(value)
 	var minutes := total_seconds / 60
