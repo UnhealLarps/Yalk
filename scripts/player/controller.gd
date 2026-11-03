@@ -209,10 +209,10 @@ func reset_for_round():
 	base_r_shoulder_y = base_right_shoulder_pos.y
 	left_hand_area.monitoring = true
 	left_hand_area.collision_layer = 16
-	left_hand_area.collision_mask = 12
+	left_hand_area.collision_mask = 14
 	right_hand_area.monitoring = true
 	right_hand_area.collision_layer = 16
-	right_hand_area.collision_mask = 12
+	right_hand_area.collision_mask = 14
 	left_hand_collision.collision_layer = 0
 	left_hand_collision.collision_mask = 0
 	right_hand_collision.collision_layer = 0
@@ -226,6 +226,9 @@ func reset_for_round():
 	camera.enabled = not NetworkManager.is_networked() or local_player
 	if ultra_violence != null and ultra_violence.has_method("reset_for_round"):
 		ultra_violence.call("reset_for_round")
+	var push_component := get_node_or_null("Push")
+	if push_component != null and push_component.has_method("reset_for_round"):
+		push_component.call("reset_for_round")
 
 func set_local_player(value: bool):
 	local_player = value

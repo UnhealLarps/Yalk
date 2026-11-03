@@ -386,6 +386,22 @@ func send_player_state(state: Dictionary):
 		return
 	player_state_rpc.rpc_id(1, state)
 
+func send_player_push(peer_id: int, impulse: Vector2) -> void:
+	if not is_server() or peer_id <= 1 or not impulse.is_finite():
+		return
+	apply_player_push.rpc_id(peer_id, peer_id, impulse)
+
+@rpc("authority", "call_remote", "reliable", 9)
+func apply_player_push(peer_id: int, impulse: Vector2) -> void:
+	if not is_client() or peer_id != local_player_id or not impulse.is_finite():
+		return
+	var player := _get_player(peer_id)
+	if player == null:
+		return
+	var push_node := player.get_node_or_null("Push")
+	if push_node != null and push_node.has_method("apply_network_push"):
+		push_node.call("apply_network_push", impulse)
+
 func send_chat_message(message: String, _sender_position: Vector2 = Vector2.ZERO) -> void:
 	var clean_message := _sanitize_chat_message(message)
 	if clean_message.is_empty():

@@ -108,6 +108,8 @@ func _process(delta: float):
 			return
 		if is_reloading or not is_hand_active() or fire_cooldown > 0.0:
 			return
+		if _push_blocks_fire(player):
+			return
 		if Input.is_action_pressed("fire"):
 			fire_cooldown = 1.0 / fire_rate
 			NetworkManager.send_to_server({"kind": "gun", "action": "shoot", "item_id": int(get_parent().get_meta("network_item_id", -1))})
@@ -116,6 +118,8 @@ func _process(delta: float):
 		reload()
 		return
 	if is_reloading or not is_hand_active() or not Input.is_action_pressed("fire") or fire_cooldown > 0.0:
+		return
+	if _push_blocks_fire(player):
 		return
 	shoot()
 
@@ -166,6 +170,19 @@ func is_hand_active() -> bool:
 	if hand_area.name == "RightHandArea":
 		return Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	return false
+
+func _push_blocks_fire(player: CharacterBody2D) -> bool:
+	var push_node := player.get_node_or_null("Push")
+	if push_node == null or not push_node.has_method("blocks_fire_for_hand"):
+		return false
+	var marker := get_holder_marker()
+	if marker == null:
+		return false
+	var hand_area := marker.get_parent()
+	if hand_area == null:
+		return false
+	var hand_index := 0 if hand_area.name == "LeftHandArea" else 1 if hand_area.name == "RightHandArea" else -1
+	return push_node.call("blocks_fire_for_hand", hand_index) == true
 
 func shoot():
 	if muzzle == null:

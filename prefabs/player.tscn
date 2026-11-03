@@ -17,8 +17,8 @@
 [ext_resource type="Script" uid="uid://cdyuibj8uq3dm" path="res://scripts/player/violence.gd" id="14_lulei"]
 [ext_resource type="PackedScene" uid="uid://y3bi5jqfy1dc" path="res://prefabs/ui/playerHud.tscn" id="16_lulei"]
 [ext_resource type="Script" uid="uid://dvhsm3bq15h6d" path="res://scripts/player/corpse.gd" id="18_corpse"]
-[ext_resource type="Script" uid="uid://c53wlqnb80ukf" path="res://scripts/ui/pause_menu.gd" id="18_f2e50"]
 [ext_resource type="PackedScene" uid="uid://cg51rcs0m6wrm" path="res://prefabs/ui/pause_menu.tscn" id="19_22xyk"]
+[ext_resource type="Script" path="res://scripts/player/push.gd" id="20_push"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8cdkg"]
 radius = 20.0
@@ -189,7 +189,7 @@ shape = SubResource("CircleShape2D_56dyf")
 
 [node name="LeftHandArea" type="Area2D" parent="LeftHandCollision" unique_id=471607140]
 collision_layer = 16
-collision_mask = 12
+collision_mask = 14
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftHandCollision/LeftHandArea" unique_id=120001]
 shape = SubResource("CircleShape2D_56dyf")
@@ -208,7 +208,7 @@ shape = SubResource("CircleShape2D_56dyf")
 
 [node name="RightHandArea" type="Area2D" parent="RightHandCollision" unique_id=1096923279]
 collision_layer = 16
-collision_mask = 12
+collision_mask = 14
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightHandCollision/RightHandArea" unique_id=120003]
 shape = SubResource("CircleShape2D_56dyf")
@@ -282,10 +282,12 @@ right_hand_skin = NodePath("../BodyVisuals/Hands/RightShoulder/Skin")
 right_hand_muscle = NodePath("../BodyVisuals/Hands/RightShoulder/Muscle")
 right_hand_skeleton = NodePath("../BodyVisuals/Hands/RightShoulder/Skeleton")
 
+[node name="Push" type="Node" parent="." unique_id=1103180686]
+script = ExtResource("20_push")
+
 [node name="ItemDescription" parent="." unique_id=800957900 instance=ExtResource("7_kbsxf")]
 
 [node name="HUD" parent="." unique_id=275636475 instance=ExtResource("16_lulei")]
 
 [node name="PauseMenu" parent="." unique_id=981074555 instance=ExtResource("19_22xyk")]
 visible = false
-script = ExtResource("18_f2e50")
