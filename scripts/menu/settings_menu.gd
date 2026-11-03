@@ -2,7 +2,6 @@ extends Window
 
 @onready var window_mode_button: OptionButton = %WindowModeButton
 @onready var show_fps_check: CheckBox = %ShowFpsCheck
-@onready var dramatic_death_check: CheckBox = %DramaticDeathCheck
 @onready var master_slider: HSlider = %MasterSlider
 
 @onready var reset_button: Button = %ResetButton
@@ -26,7 +25,6 @@ func update_ui_from_settings() -> void:
 		"fullscreen": window_mode_button.selected = 2
 		
 	show_fps_check.button_pressed = Settings.check_option("show_fps")
-	dramatic_death_check.button_pressed = Settings.check_option("dramatic_death")
 
 	var vol = Settings.check_option("master_volume")
 	master_slider.value = vol if vol != null else 100.0
@@ -42,7 +40,6 @@ func _on_apply_pressed() -> void:
 	Settings.set_option("window_mode", mode_string)
 	WindowManager.apply_window_settings()
 	Settings.set_option("show_fps", show_fps_check.button_pressed)
-	Settings.set_option("dramatic_death", dramatic_death_check.button_pressed)
 	Settings.set_option("master_volume", master_slider.value)
 	Settings.save_settings()
 

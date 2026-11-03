@@ -5,7 +5,6 @@ const DEFAULTS := {
 	"window_mode": "window",
 	"master_volume": 100,
 	"show_fps": false,
-	"dramatic_death": false,
 }
 
 var rep := Reporter.new("Settings")

@@ -79,11 +79,6 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Show FPS"
 
-[node name="DramaticDeathCheck" type="CheckBox" parent="MainLayout/Tabs/Game/List" unique_id=1382781828]
-unique_name_in_owner = true
-layout_mode = 2
-text = "More dramatic death"
-
 [node name="Audio" type="MarginContainer" parent="MainLayout/Tabs" unique_id=1861161184]
 visible = false
 layout_mode = 2
