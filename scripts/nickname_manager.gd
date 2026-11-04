@@ -35,6 +35,8 @@ func _process(_delta: float):
 			_assign_nickname(1, local_nickname)
 		return
 	if network_manager.call("is_client") == true and not own_name_request_sent:
+		if network_manager.get("identity_authenticated") != true:
+			return
 		var peer: MultiplayerPeer = multiplayer.multiplayer_peer
 		if peer != null and peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 			request_nickname.rpc_id(1, local_nickname)
@@ -68,7 +70,7 @@ func request_nickname(requested_name: String):
 	if network_manager == null or network_manager.call("is_server") != true:
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
-	if peer_id <= 1:
+	if peer_id <= 1 or not network_manager.get("registered_peers").has(peer_id):
 		return
 	for existing_id_value in nicknames.keys():
 		var existing_id := int(existing_id_value)

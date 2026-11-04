@@ -21,6 +21,8 @@ func _ready() -> void:
 	input.text_submitted.connect(_on_text_submitted)
 	if not NetworkManager.chat_message_received.is_connected(_on_chat_message_received):
 		NetworkManager.chat_message_received.connect(_on_chat_message_received)
+	if not NetworkManager.console_message_received.is_connected(_on_console_message_received):
+		NetworkManager.console_message_received.connect(_on_console_message_received)
 
 func _process(delta: float) -> void:
 	if chat_open and not _can_write():
@@ -131,6 +133,12 @@ func _on_chat_message_received(sender_id: int, nickname: String, message: String
 		if sender != null:
 			_show_bubble(sender, message)
 
+func _on_console_message_received(message: String) -> void:
+	history_lines.append(message)
+	while history_lines.size() > MAX_HISTORY_LINES:
+		history_lines.pop_front()
+	_render_history()
+
 func _find_sender(sender_id: int) -> CharacterBody2D:
 	if sender_id > 0:
 		return NetworkManager.get_player(sender_id)
@@ -140,7 +148,7 @@ func _find_sender(sender_id: int) -> CharacterBody2D:
 func _render_history() -> void:
 	var lines := PackedStringArray()
 	for line in history_lines:
-		lines.append("[outline_size=2][outline_color=#000000][color=#ffffff]%s[/color][/outline_color][/outline_size]" % _escape_bbcode(line))
+		lines.append("%s" % _escape_bbcode(line))
 	history.text = "\n".join(lines)
 	history.visible = not history_lines.is_empty()
 
@@ -148,7 +156,7 @@ func _show_bubble(sender: CharacterBody2D, message: String) -> void:
 	var bubble := sender.get_node_or_null("ChatBubble") as RichTextLabel
 	if bubble == null:
 		return
-	bubble.text = "[outline_size=3][outline_color=#000000][color=#ffffff]%s[/color][/outline_color][/outline_size]" % _escape_bbcode(message)
+	bubble.text = "%s" % _escape_bbcode(message)
 	bubble.visible = true
 	bubble_timers[bubble.get_instance_id()] = {"label": bubble, "remaining": CHAT_DURATION}
 

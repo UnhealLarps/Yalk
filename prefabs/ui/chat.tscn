@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c8e6lnm6e234l"]
 
 [ext_resource type="Script" uid="uid://0uxxfd08pxiy" path="res://scripts/ui/chat.gd" id="1_chat"]
+[ext_resource type="Script" uid="uid://ds75o7wafpk34" path="res://scripts/ui/console.gd" id="2_console"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chat"]
 content_margin_left = 7.0
@@ -17,6 +18,9 @@ border_color = Color(0.78, 0, 0, 1)
 [node name="Chat" type="CanvasLayer" unique_id=1442741961]
 layer = 25
 script = ExtResource("1_chat")
+
+[node name="Console" type="Node" parent="." unique_id=1129849416]
+script = ExtResource("2_console")
 
 [node name="Root" type="Control" parent="." unique_id=485435631]
 layout_mode = 3

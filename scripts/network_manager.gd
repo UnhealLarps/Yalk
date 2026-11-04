@@ -1,6 +1,9 @@
 # even worse shit than controller
 extends Node
 
+const IdentityScript = preload("res://scripts/player/identity.gd")
+
+signal console_message_received(message: String)
 signal server_message(peer_id: int, message: Dictionary)
 signal server_player_state(peer_id: int, state: Dictionary)
 signal chat_message_received(sender_id: int, nickname: String, message: String, sender_position: Vector2)
@@ -18,6 +21,11 @@ const PLAYER_STATE_MIN_INTERVAL_USEC := 10000
 const PLAYER_NAME_PREFIX := "Player_"
 
 var rep := Reporter.new("NetworkManager")
+var identity: Variant = IdentityScript.new()
+var identity_ready := false
+var identity_authenticated := false
+var authenticated_peer_fingerprints: Dictionary = {}
+var pending_identity_challenges: Dictionary = {}
 var network_active := false
 var local_player_id := 0
 var server_name := "Yalk Server"
@@ -56,6 +64,9 @@ var clock_offset_usec := 0
 var clock_offset_initialized := false
 
 func _ready():
+	identity_ready = identity.initialize()
+	if not identity_ready:
+		rep.error("Failed to load or create player identity key")
 	_create_round_manager()
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
@@ -79,6 +90,11 @@ func _process(delta: float):
 			_send_clock_ping()
 	if not is_server():
 		return
+	var now_msec := Time.get_ticks_msec()
+	for peer_id_value in pending_identity_challenges.keys().duplicate():
+		var pending: Dictionary = pending_identity_challenges.get(peer_id_value, {})
+		if now_msec - int(pending.get("created_at", 0)) > 15000:
+			_reject_identity_peer(int(peer_id_value))
 	player_timer += delta
 	item_timer += delta
 	if player_timer >= 1.0 / PLAYER_STATE_RATE:
@@ -103,7 +119,7 @@ func clock_ping(client_sent_usec: int):
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
-	if peer_id <= 0:
+	if peer_id <= 1 or not registered_peers.has(peer_id):
 		return
 	var server_received_usec := Time.get_ticks_usec()
 	var server_sent_usec := Time.get_ticks_usec()
@@ -136,6 +152,9 @@ func is_server_authority() -> bool:
 func host(port: int = -1, max_players: int = -1, requested_server_name: String = "") -> int:
 	if network_active:
 		return ERR_ALREADY_IN_USE
+	if not identity_ready or not identity.load_banlist():
+		rep.error("Identity key or user://banlist.json is unavailable or invalid")
+		return ERR_FILE_CORRUPT
 	host_port = Args.port if port <= 0 else clampi(port, 1, 65535)
 	configured_max_players = MAX_CONNECTIONS + 1 if max_players <= 0 else clampi(max_players, 2, 64)
 	server_name = requested_server_name.strip_edges()
@@ -259,11 +278,71 @@ func _update_saved_server_status(ip: String, port: int, online: bool) -> void:
 func request_server_info() -> void:
 	if not is_server():
 		return
-	var peer_id := multiplayer.get_remote_sender_id()
-	if peer_id <= 1:
+	_start_identity_challenge(multiplayer.get_remote_sender_id())
+
+@rpc("any_peer", "call_remote", "reliable", 10)
+func request_identity_challenge() -> void:
+	if not is_server():
 		return
+	_start_identity_challenge(multiplayer.get_remote_sender_id())
+
+func _start_identity_challenge(peer_id: int) -> void:
+	if peer_id <= 1 or registered_peers.has(peer_id) or pending_identity_challenges.has(peer_id) or not identity_ready:
+		return
+	var challenge: PackedByteArray = identity.generate_challenge()
+	if challenge.size() != 32:
+		_reject_identity_peer(peer_id)
+		return
+	pending_identity_challenges[peer_id] = {"challenge": challenge, "created_at": Time.get_ticks_msec()}
+	receive_identity_challenge.rpc_id(peer_id, challenge)
+
+@rpc("authority", "call_remote", "reliable", 10)
+func receive_identity_challenge(challenge: PackedByteArray) -> void:
+	if not is_client() or not identity_ready or challenge.size() != 32:
+		return
+	var signature: PackedByteArray = identity.sign_challenge(challenge)
+	var public_key_pem: String = identity.get_public_key_pem()
+	if signature.is_empty() or public_key_pem.is_empty():
+		rep.error("Failed to sign server identity challenge")
+		return
+	submit_identity.rpc_id(1, public_key_pem, signature)
+
+@rpc("any_peer", "call_remote", "reliable", 10)
+func submit_identity(public_key_pem: String, signature: PackedByteArray) -> void:
+	if not is_server():
+		return
+	var peer_id := multiplayer.get_remote_sender_id()
+	if peer_id <= 1 or not pending_identity_challenges.has(peer_id):
+		return
+	var pending: Dictionary = pending_identity_challenges[peer_id]
+	pending_identity_challenges.erase(peer_id)
+	var challenge: PackedByteArray = pending.get("challenge", PackedByteArray())
+	var created_at := int(pending.get("created_at", 0))
+	if Time.get_ticks_msec() - created_at > 15000 or not identity.verify_challenge(public_key_pem, challenge, signature):
+		_reject_identity_peer(peer_id)
+		return
+	var fingerprint: String = identity.get_fingerprint(public_key_pem)
+	if fingerprint.is_empty() or identity.is_banned(fingerprint):
+		_reject_identity_peer(peer_id)
+		return
+	authenticated_peer_fingerprints[peer_id] = fingerprint
 	_register_peer(peer_id)
+	identity_accepted.rpc_id(peer_id)
 	server_info_received.rpc_id(peer_id, server_name, get_connected_peer_ids().size(), configured_max_players)
+
+@rpc("authority", "call_remote", "reliable", 10)
+func identity_accepted() -> void:
+	if is_client():
+		identity_authenticated = true
+
+func _reject_identity_peer(peer_id: int) -> void:
+	pending_identity_challenges.erase(peer_id)
+	authenticated_peer_fingerprints.erase(peer_id)
+	if is_server() and peer_id > 1 and multiplayer.multiplayer_peer != null:
+		multiplayer.multiplayer_peer.disconnect_peer(peer_id)
+
+func get_peer_fingerprint(peer_id: int) -> String:
+	return str(authenticated_peer_fingerprints.get(peer_id, ""))
 
 @rpc("any_peer", "call_remote", "reliable", 10)
 func request_server_info_probe() -> void:
@@ -354,6 +433,7 @@ func disconnect_network():
 	spawn_claims.clear()
 	registered_peers.clear()
 	pending_server_entry.clear()
+	identity_authenticated = false
 	last_player_state_time.clear()
 	last_player_sequence.clear()
 	last_correction_time.clear()
@@ -364,6 +444,8 @@ func disconnect_network():
 	clock_offset_usec = 0
 	clock_offset_initialized = false
 	last_chat_message_msec.clear()
+	authenticated_peer_fingerprints.clear()
+	pending_identity_challenges.clear()
 	pending_player_states.clear()
 	last_client_round_number = 0
 	cached_round_active.clear()
@@ -386,30 +468,17 @@ func send_player_state(state: Dictionary):
 		return
 	player_state_rpc.rpc_id(1, state)
 
-func send_player_push(peer_id: int, impulse: Vector2) -> void:
-	if not is_server() or peer_id <= 1 or not impulse.is_finite():
-		return
-	apply_player_push.rpc_id(peer_id, peer_id, impulse)
-
-@rpc("authority", "call_remote", "reliable", 9)
-func apply_player_push(peer_id: int, impulse: Vector2) -> void:
-	if not is_client() or peer_id != local_player_id or not impulse.is_finite():
-		return
-	var player := _get_player(peer_id)
-	if player == null:
-		return
-	var push_node := player.get_node_or_null("Push")
-	if push_node != null and push_node.has_method("apply_network_push"):
-		push_node.call("apply_network_push", impulse)
-
 func send_chat_message(message: String, _sender_position: Vector2 = Vector2.ZERO) -> void:
 	var clean_message := _sanitize_chat_message(message)
 	if clean_message.is_empty():
 		return
 	if not is_networked():
-		var player := _find_offline_chat_player()
-		var position := player.global_position if player != null else Vector2.ZERO
-		_dispatch_chat_message(0, NicknameManager.get_nickname(0), clean_message, position)
+		if clean_message.begins_with("/"):
+			_process_console_command(0, clean_message)
+		else:
+			var player := _find_offline_chat_player()
+			var position := player.global_position if player != null else Vector2.ZERO
+			_dispatch_chat_message(0, NicknameManager.get_nickname(0), clean_message, position)
 		return
 	if is_server():
 		if local_player_id > 0:
@@ -420,6 +489,51 @@ func send_chat_message(message: String, _sender_position: Vector2 = Vector2.ZERO
 		if player == null or player.get("is_dead") == true:
 			return
 		request_chat_message.rpc_id(1, clean_message)
+
+func _process_console_command(sender_id: int, message: String) -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	var console := scene.find_child("Console", true, false)
+	if console != null and console.has_method("process_command"):
+		console.call("process_command", sender_id, message)
+	else:
+		send_console_output(sender_id, "Console is unavailable")
+
+func send_console_output(peer_id: int, message: String) -> void:
+	var clean_message := message.replace("\r", " ").substr(0, 1000)
+	if not is_networked():
+		console_message_received.emit(clean_message)
+		return
+	if not is_server():
+		return
+	if peer_id == 1:
+		console_message_received.emit(clean_message)
+	elif peer_id > 1 and registered_peers.has(peer_id):
+		receive_console_output.rpc_id(peer_id, clean_message)
+
+@rpc("authority", "call_remote", "reliable", 8)
+func receive_console_output(message: String) -> void:
+	if is_server():
+		return
+	console_message_received.emit(message.replace("\r", " ").substr(0, 1000))
+
+func kick_player(peer_id: int, reason: String = "") -> bool:
+	if not is_server() or peer_id <= 1 or not registered_peers.has(peer_id) or multiplayer.multiplayer_peer == null:
+		return false
+	receive_kick_notice.rpc_id(peer_id, reason.substr(0, 160))
+	var timer := get_tree().create_timer(0.2)
+	timer.timeout.connect(_disconnect_kicked_peer.bind(peer_id))
+	return true
+
+func _disconnect_kicked_peer(peer_id: int) -> void:
+	if is_server() and registered_peers.has(peer_id) and multiplayer.multiplayer_peer != null:
+		multiplayer.multiplayer_peer.disconnect_peer(peer_id)
+
+@rpc("authority", "call_remote", "reliable", 8)
+func receive_kick_notice(reason: String) -> void:
+	if not is_server():
+		console_message_received.emit("Disconnected: " + reason.substr(0, 160))
 
 func _find_offline_chat_player() -> CharacterBody2D:
 	var scene := get_tree().current_scene
@@ -435,7 +549,8 @@ func _sanitize_chat_message(message: String) -> String:
 	return clean_message.substr(0, CHAT_MAX_MESSAGE_LENGTH).strip_edges()
 
 func _accept_chat_message(peer_id: int, message: String) -> void:
-	if peer_id <= 0:
+	var local_host := is_server() and peer_id == 1
+	if peer_id <= 0 or (not local_host and not registered_peers.has(peer_id)):
 		return
 	var player := _get_player(peer_id)
 	if player == null or player.get("is_dead") == true:
@@ -447,6 +562,9 @@ func _accept_chat_message(peer_id: int, message: String) -> void:
 	last_chat_message_msec[peer_id] = now
 	var clean_message := _sanitize_chat_message(message)
 	if clean_message.is_empty():
+		return
+	if clean_message.begins_with("/"):
+		_process_console_command(peer_id, clean_message)
 		return
 	var nickname := str(NicknameManager.get_nickname(peer_id))
 	if nickname.is_empty():
@@ -475,7 +593,7 @@ func server_message_rpc(message: Dictionary):
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
-	if peer_id > 0:
+	if peer_id > 1 and registered_peers.has(peer_id):
 		server_message.emit(peer_id, message)
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
@@ -483,7 +601,7 @@ func player_state_rpc(state: Dictionary):
 	if not multiplayer.is_server():
 		return
 	var peer_id := multiplayer.get_remote_sender_id()
-	if peer_id <= 0:
+	if peer_id <= 1 or not registered_peers.has(peer_id):
 		return
 	var now := Time.get_ticks_usec()
 	var previous := int(last_player_state_time.get(peer_id, 0))
@@ -1335,6 +1453,8 @@ func item_destroyed(item_id: int):
 func _on_peer_disconnected(peer_id: int):
 	var was_registered := registered_peers.has(peer_id)
 	registered_peers.erase(peer_id)
+	authenticated_peer_fingerprints.erase(peer_id)
+	pending_identity_challenges.erase(peer_id)
 	var player := _get_player(peer_id)
 	if player != null:
 		if player.has_method("drop_all_items"):
@@ -1351,11 +1471,16 @@ func _on_peer_disconnected(peer_id: int):
 
 func _on_connected_to_server():
 	local_player_id = multiplayer.get_unique_id()
+	identity_authenticated = false
 	if is_client():
 		if server_probe_active:
 			request_server_info_probe.rpc_id(1)
 		else:
-			request_server_info.rpc_id(1)
+			if identity_ready:
+				request_identity_challenge.rpc_id(1)
+			else:
+				rep.error("Player identity is unavailable")
+				disconnect_network()
 	if server_probe_active:
 		return
 	if cached_round_state_valid:
@@ -1370,6 +1495,7 @@ func _on_connection_failed():
 	_schedule_disconnect_cleanup()
 
 func _on_server_disconnected():
+	identity_authenticated = false
 	if server_probe_active:
 		_finish_server_probe(false)
 		return
