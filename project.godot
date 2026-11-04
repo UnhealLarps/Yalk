@@ -26,7 +26,7 @@ Settings="*uid://bxwk6e6eq52qy"
 
 [display]
 
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://dtva0xc25g5bv"
 
 [dotnet]
