@@ -1,7 +1,7 @@
 > [!WARNING]
 > The game is in early development and everything may change before release.
 
-<img src="https://github.com/UnhealLarps/Yalk/blob/main/sprites/yalkLogo.png?raw=true" width=25%>
+<img src="https://github.com/UnhealLarps/Yalk/blob/main/sprites/yalkLogo.png?raw=true" width=30%>
 
 <b> [Releases](https://github.com/UnhealLarps/Yalk/releases) | [Discord](https://discord.gg/y2wBXQThc9) </b>
 
