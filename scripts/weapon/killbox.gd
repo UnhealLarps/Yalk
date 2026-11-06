@@ -7,9 +7,16 @@ const HEART_ORGAN := 0
 func _ready():
 	if area == null:
 		return
+	var server_authority := NetworkManager.is_server_authority()
 	area.collision_layer = 0
 	area.collision_mask = 2
-	area.monitoring = true
+	area.monitoring = server_authority
+	area.monitorable = server_authority
+	for child in area.get_children():
+		if child is CollisionPolygon2D:
+			(child as CollisionPolygon2D).disabled = not server_authority
+		elif child is CollisionShape2D:
+			(child as CollisionShape2D).disabled = not server_authority
 	if not area.body_entered.is_connected(_on_body_entered):
 		area.body_entered.connect(_on_body_entered)
 

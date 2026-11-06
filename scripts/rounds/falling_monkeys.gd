@@ -1,10 +1,11 @@
 extends Resource
 
 const MONKEY_SCENE_PATH := "res://prefabs/weapons/monkey.tscn"
-const MUSIC_PATH := "res://audio/music/rounds/DoomHangar.wav"
-const SPAWN_INTERVAL_MIN := 0.28
-const SPAWN_INTERVAL_MAX := 0.42
-const MONKEYS_PER_WAVE := 2
+const MUSIC_PATH := "res://audio/music/rounds/DraggedThroughHellfire.mp3"
+const SPAWN_INTERVAL_MIN := 0.9
+const SPAWN_INTERVAL_MAX := 1.2
+const MONKEYS_PER_WAVE := 1
+const MAX_ACTIVE_MONKEYS := 4
 const MONKEY_SPEED_MIN := 1050.0
 const MONKEY_SPEED_MAX := 1450.0
 const SPAWN_HEIGHT_MIN := 1700.0
@@ -56,6 +57,8 @@ func process_round(delta: float, player_ids: Array[int]):
 	spawn_timer -= delta
 	if spawn_timer <= 0.0:
 		for index in range(MONKEYS_PER_WAVE):
+			if monkey_states.size() >= MAX_ACTIVE_MONKEYS:
+				break
 			_spawn_monkey()
 		spawn_timer = randf_range(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX)
 	for id_value in monkey_states.keys().duplicate():

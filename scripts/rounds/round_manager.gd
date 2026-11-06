@@ -49,6 +49,8 @@ var shooter_music_path := ""
 var falling_monkeys_music_player: AudioStreamPlayer = null
 var falling_monkeys_music_path := ""
 
+var rep = Reporter.new("RoundManager")
+
 func _ready():
 	mode_rng.randomize()
 	if NetworkManager.is_server():
@@ -366,7 +368,7 @@ func _choose_random_mode() -> Resource:
 	var selected_mode_id := mode_bag[selected_index]
 	mode_bag.remove_at(selected_index)
 	last_chosen_mode_id = selected_mode_id
-	print("Selected round mode: ", selected_mode_id)
+	rep.info("Selected round mode: " + selected_mode_id)
 	return _create_mode(selected_mode_id)
 
 func _create_mode(mode_id: String) -> Resource:
@@ -585,16 +587,23 @@ func _update_falling_monkeys_music():
 			falling_monkeys_music_player.play()
 		return
 	_stop_falling_monkeys_music()
-	var loaded_stream := ResourceLoader.load(path) as AudioStreamWAV
+	var loaded_stream := ResourceLoader.load(path) as AudioStream
 	if loaded_stream == null:
+		push_warning("Falling Monkeys music could not be loaded: %s" % path)
 		return
-	var stream := loaded_stream.duplicate(true) as AudioStreamWAV
+	var stream := loaded_stream.duplicate(true) as AudioStream
 	if stream == null:
-		return
-	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	if stream.loop_end <= stream.loop_begin:
-		stream.loop_begin = 0
-		stream.loop_end = maxi(1, int(stream.get_length() * float(stream.mix_rate)))
+		stream = loaded_stream
+	if stream is AudioStreamMP3:
+		(stream as AudioStreamMP3).loop = true
+	elif stream is AudioStreamOggVorbis:
+		(stream as AudioStreamOggVorbis).loop = true
+	elif stream is AudioStreamWAV:
+		var wav_stream := stream as AudioStreamWAV
+		wav_stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		if wav_stream.loop_end <= wav_stream.loop_begin:
+			wav_stream.loop_begin = 0
+			wav_stream.loop_end = maxi(1, int(wav_stream.get_length() * float(wav_stream.mix_rate)))
 	falling_monkeys_music_player = AudioStreamPlayer.new()
 	falling_monkeys_music_player.name = "FallingMonkeysMusic"
 	falling_monkeys_music_player.stream = stream
