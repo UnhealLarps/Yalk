@@ -16,6 +16,7 @@ const MURDERER_MODE = preload("res://scripts/rounds/murderer.gd")
 const MASSACRE_MODE = preload("res://scripts/rounds/massacre.gd")
 const DEATHMATCH_MODE = preload("res://scripts/rounds/deathmatch.gd")
 const KOH_MODE = preload("res://scripts/rounds/koh.gd")
+const FALLING_MONKEYS_MODE = preload("res://scripts/rounds/falling_monkeys.gd")
 
 var mode: Resource = MURDERER_MODE.new()
 var phase: int = Phase.WAITING
@@ -41,6 +42,8 @@ var last_received_map_revision := -1
 var map_reset_pending := false
 var shooter_music_player: AudioStreamPlayer = null
 var shooter_music_path := ""
+var falling_monkeys_music_player: AudioStreamPlayer = null
+var falling_monkeys_music_path := ""
 
 func _ready():
 	if NetworkManager.is_server():
@@ -342,7 +345,7 @@ func _get_mode_id() -> String:
 	return str(value) if value is String else "murderer"
 
 func _choose_random_mode() -> Resource:
-	var available_modes: Array[Resource] = [MURDERER_MODE.new(), MASSACRE_MODE.new(), DEATHMATCH_MODE.new(), KOH_MODE.new()]
+	var available_modes: Array[Resource] = [MURDERER_MODE.new(), MASSACRE_MODE.new(), DEATHMATCH_MODE.new(), KOH_MODE.new(), FALLING_MONKEYS_MODE.new()]
 	return available_modes.pick_random() as Resource
 
 func _create_mode(mode_id: String) -> Resource:
@@ -353,6 +356,8 @@ func _create_mode(mode_id: String) -> Resource:
 			return DEATHMATCH_MODE.new() as Resource
 		"koh":
 			return KOH_MODE.new() as Resource
+		"falling_monkeys":
+			return FALLING_MONKEYS_MODE.new() as Resource
 		_:
 			return MURDERER_MODE.new() as Resource
 
@@ -482,7 +487,7 @@ func _show_round_start():
 			image.texture = image_value
 	if _should_continue_shooter_music():
 		_update_shooter_music()
-	elif round_start_ui.has_method("play_presentation_music"):
+	elif str(mode.get("mode_id")) != "falling_monkeys" and round_start_ui.has_method("play_presentation_music"):
 		round_start_ui.call("play_presentation_music", str(mode.get("music_path")), INTRO_TIME)
 
 
@@ -546,6 +551,44 @@ func _show_round_result():
 		return
 	get_tree().current_scene.add_child(round_result_ui)
 
+func _update_falling_monkeys_music():
+	if Args.headless or not started or phase == Phase.WAITING or str(mode.get("mode_id")) != "falling_monkeys":
+		_stop_falling_monkeys_music()
+		return
+	var path := str(mode.get("music_path"))
+	if path.is_empty() or not ResourceLoader.exists(path):
+		_stop_falling_monkeys_music()
+		return
+	if falling_monkeys_music_player != null and is_instance_valid(falling_monkeys_music_player) and falling_monkeys_music_path == path:
+		if not falling_monkeys_music_player.playing:
+			falling_monkeys_music_player.play()
+		return
+	_stop_falling_monkeys_music()
+	var loaded_stream := ResourceLoader.load(path) as AudioStreamWAV
+	if loaded_stream == null:
+		return
+	var stream := loaded_stream.duplicate(true) as AudioStreamWAV
+	if stream == null:
+		return
+	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	if stream.loop_end <= stream.loop_begin:
+		stream.loop_begin = 0
+		stream.loop_end = maxi(1, int(stream.get_length() * float(stream.mix_rate)))
+	falling_monkeys_music_player = AudioStreamPlayer.new()
+	falling_monkeys_music_player.name = "FallingMonkeysMusic"
+	falling_monkeys_music_player.stream = stream
+	falling_monkeys_music_player.volume_db = -3.0
+	add_child(falling_monkeys_music_player)
+	falling_monkeys_music_path = path
+	falling_monkeys_music_player.play()
+
+func _stop_falling_monkeys_music():
+	if falling_monkeys_music_player != null and is_instance_valid(falling_monkeys_music_player):
+		falling_monkeys_music_player.stop()
+		falling_monkeys_music_player.queue_free()
+	falling_monkeys_music_player = null
+	falling_monkeys_music_path = ""
+
 func _hide_round_result():
 	if round_result_ui != null and is_instance_valid(round_result_ui):
 		GC.destroy(round_result_ui)
@@ -553,6 +596,7 @@ func _hide_round_result():
 
 func _update_ui():
 	_update_shooter_music()
+	_update_falling_monkeys_music()
 	if Args.headless:
 		return
 	if phase == Phase.INTRO:

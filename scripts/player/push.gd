@@ -105,11 +105,16 @@ func receive_server_push(impulse: Vector2) -> void:
 	if not NetworkManager.is_server_authority() or player == null or player.is_dead or not impulse.is_finite():
 		return
 	if NetworkManager.is_networked() and not player.local_player:
-		NetworkManager.send_player_push(int(player.get("network_player_id")), impulse)
+		var peer_id := int(player.get("network_player_id"))
+		if peer_id > 1:
+			apply_network_push.rpc_id(peer_id, impulse)
+		else:
+			apply_network_push(impulse)
 	else:
 		apply_network_push(impulse)
 	_register_push(impulse)
 
+@rpc("authority", "call_remote", "reliable", 0)
 func apply_network_push(impulse: Vector2) -> void:
 	if player == null or not is_instance_valid(player) or player.is_dead or not impulse.is_finite():
 		return
