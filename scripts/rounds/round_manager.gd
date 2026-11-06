@@ -17,8 +17,12 @@ const MASSACRE_MODE = preload("res://scripts/rounds/massacre.gd")
 const DEATHMATCH_MODE = preload("res://scripts/rounds/deathmatch.gd")
 const KOH_MODE = preload("res://scripts/rounds/koh.gd")
 const FALLING_MONKEYS_MODE = preload("res://scripts/rounds/falling_monkeys.gd")
+const AVAILABLE_MODE_IDS := ["murderer", "massacre", "deathmatch", "koh", "falling_monkeys"]
 
 var mode: Resource = MURDERER_MODE.new()
+var mode_rng := RandomNumberGenerator.new()
+var mode_bag: Array[String] = []
+var last_chosen_mode_id := ""
 var phase: int = Phase.WAITING
 var phase_time := WAITING_TIME
 var round_elapsed := 0.0
@@ -46,6 +50,7 @@ var falling_monkeys_music_player: AudioStreamPlayer = null
 var falling_monkeys_music_path := ""
 
 func _ready():
+	mode_rng.randomize()
 	if NetworkManager.is_server():
 		start_host_rounds()
 
@@ -99,6 +104,8 @@ func _update_client_clock():
 func start_host_rounds():
 	if not NetworkManager.is_server() or started:
 		return
+	mode_bag.clear()
+	last_chosen_mode_id = ""
 	started = true
 	phase = Phase.WAITING
 	phase_time = WAITING_TIME
@@ -345,8 +352,22 @@ func _get_mode_id() -> String:
 	return str(value) if value is String else "murderer"
 
 func _choose_random_mode() -> Resource:
-	var available_modes: Array[Resource] = [MURDERER_MODE.new(), MASSACRE_MODE.new(), DEATHMATCH_MODE.new(), KOH_MODE.new(), FALLING_MONKEYS_MODE.new()]
-	return available_modes.pick_random() as Resource
+	if mode_bag.is_empty():
+		for mode_id in AVAILABLE_MODE_IDS:
+			mode_bag.append(str(mode_id))
+		for index in range(mode_bag.size() - 1, 0, -1):
+			var swap_index := mode_rng.randi_range(0, index)
+			var swapped_mode_id := mode_bag[index]
+			mode_bag[index] = mode_bag[swap_index]
+			mode_bag[swap_index] = swapped_mode_id
+	var selected_index := mode_bag.size() - 1
+	if mode_bag.size() > 1 and mode_bag[selected_index] == last_chosen_mode_id:
+		selected_index = mode_rng.randi_range(0, mode_bag.size() - 2)
+	var selected_mode_id := mode_bag[selected_index]
+	mode_bag.remove_at(selected_index)
+	last_chosen_mode_id = selected_mode_id
+	print("Selected round mode: ", selected_mode_id)
+	return _create_mode(selected_mode_id)
 
 func _create_mode(mode_id: String) -> Resource:
 	match mode_id.to_lower():
