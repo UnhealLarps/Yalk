@@ -27,5 +27,5 @@ For the basics, complete the in-game tutorial. For advanced details regarding ga
 # License
 All code for the content repository is licensed under the AGPL. 
 
-- **Music** - Sourced from Pixabay under the Pixabay Content License.
+- **Music** - Sourced from Pixabay under the Pixabay Content License. Also game using `Dragged Through Hellfire` by Zander Noriega
 - **Sounds** - Sourced from free resources. 
